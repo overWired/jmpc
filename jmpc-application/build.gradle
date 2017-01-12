@@ -1,0 +1,14 @@
+apply plugin: 'org.springframework.boot'
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${versions.springCloudDependencies}"
+    }
+}
+
+jar {
+    into('static') {
+        from('src/main/webapp')
+    }
+}
+

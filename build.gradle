@@ -1,0 +1,56 @@
+buildscript {
+
+	ext.versions = [
+	   gradle: '3.3',
+	   springBoot: '1.4.3.RELEASE',
+	   springCloudDependencies: 'Camden.RELEASE'
+    ]
+
+	ext.requiredRepositories = {
+		mavenCentral()
+	}
+
+    repositories(requiredRepositories)
+
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${versions.springBoot}")
+    }
+
+}
+
+
+allprojects {
+    apply plugin: 'eclipse'
+}
+
+subprojects {
+    apply plugin: 'java'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories(requiredRepositories)
+
+    dependencies {
+        compile('org.springframework.boot:spring-boot-starter-actuator')
+        compile('org.springframework.boot:spring-boot-starter-cache')
+        compile('org.springframework.cloud:spring-cloud-starter-sleuth')
+        compile('org.springframework.boot:spring-boot-starter-web') {
+            exclude module: 'spring-boot-starter-tomcat'
+        }
+        compile('org.springframework.boot:spring-boot-starter-jetty')
+        compileOnly('org.projectlombok:lombok')
+        testCompile('org.springframework.boot:spring-boot-starter-test')
+    }
+    
+}
+
+
+
+/**
+ * Allows gradle to packaged as part of the build.  This generates infrastructure files to be committed once.
+ * Then the build itself will use (or download) the correct version of gradle.
+ */
+task wrapper(type: Wrapper) {
+    gradleVersion = versions.gradle
+    distributionUrl = distributionUrl.replaceAll('-bin', '-all')
+}
