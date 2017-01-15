@@ -2,17 +2,16 @@
     <head>
         <title>Jukebox Media Player Client</title>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
-        <script type="text/javascript" src="js/jmpc.js"></script>
+        <script type="text/javascript" src="js/jukeboxmpc.js"></script>
+        <link rel="stylesheet" href="css/jukeboxmpc.css">
+        
     </head>
     <body>
         <h1>Jukebox Media Player Client</h1>
-        <div ng-controller="SongListController as songList">
-        <h2>Songs:</h2>
-        <ul>
-            <li ng-repeat="song in songList.songs">
-                {{song.title}}
-            </li>
-        </ul>
+        <div ng-controller="CardListController as cardList">
+            <div ng-repeat="card in cards">
+                <div ng-include="'card.html'"></div>
+            </div>
         </div>
     </body>
 </html>

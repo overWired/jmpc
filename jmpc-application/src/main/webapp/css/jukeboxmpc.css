@@ -1,0 +1,19 @@
+.card {
+	width: 500px;
+	border: 1px solid black;
+}
+
+.card .selector {
+	width: 5%;
+	font-weight: bold;
+    border: 1px solid green;
+}
+
+.card .text {
+	width: 90%;
+	border: 1px solid blue;
+}
+
+.title,.artist {
+    text-align: center;
+}

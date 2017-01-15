@@ -1,0 +1,23 @@
+{ "cards":[
+    {
+        "artist":"Meatloaf",
+        "id_a": "A1",
+        "title_a":"Midnight at the Lost and Found",
+        "id_b": "A2",
+        "title_b":"Paradise by the Dashboard Light"
+    },
+    {
+        "artist": "Def Leppard",
+        "id_a": "A3",
+        "title_a": "Rock Rock (Till You Drop)",
+        "id_b": "A4",
+        "title_b": "Photograph"
+    },
+    {
+        "artist": "AC/DC",
+        "id_a": "A5",
+        "title_a": "Who Made Who",
+        "id_b": "A6",
+        "title_b": "Thunderstruck"
+    }
+]}
