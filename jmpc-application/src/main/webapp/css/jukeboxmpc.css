@@ -1,19 +1,50 @@
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+	.card {
+	   max-width: 100%;
+	}
+}
+@media only screen
+and (min-device-width : 481px)
+and (max-device-width : 720px) {
+    .card {
+       max-width: 32%;
+    }
+}
+@media only screen
+and (min-device-width : 961px) {
+    .card {
+       max-width: 30%;
+    }
+}
+
+/*
+attempt to find a suitable width and let the cards stretch until another would fit, then shrink and wrao
+The numbers are very wrong now.
+*/
+
+
 .card {
-	width: 500px;
+	display: inline-block;
+    min-width: 239;
 	border: 1px solid black;
+	text-overflow: clip;
 }
 
-.card .selector {
-	width: 5%;
+.card .track {
+	border: 1px solid green;
+}
+
+.card .title {
+    font-style: italic;
+}
+
+.card .artist {
 	font-weight: bold;
-    border: 1px solid green;
+    border: 1px solid blue;
 }
 
-.card .text {
-	width: 90%;
-	border: 1px solid blue;
-}
-
-.title,.artist {
+.track,.artist {
     text-align: center;
 }
