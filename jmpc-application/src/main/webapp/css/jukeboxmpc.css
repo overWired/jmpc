@@ -1,48 +1,55 @@
-@media only screen
-and (min-device-width : 320px)
-and (max-device-width : 480px) {
+@media only screen and (max-device-width : 479px) {
 	.card {
 	   max-width: 100%;
 	}
 }
-@media only screen
-and (min-device-width : 481px)
-and (max-device-width : 720px) {
-    .card {
-       max-width: 32%;
-    }
+@media only screen and (min-device-width : 480px) and (max-device-width : 719px) {
+	.card {
+	   max-width: 50%;
+	}
 }
-@media only screen
-and (min-device-width : 961px) {
-    .card {
-       max-width: 30%;
-    }
+@media only screen and (min-device-width : 720px) and (max-device-width : 959px) {
+	.card {
+	   max-width: 33%;
+	}
+}
+@media only screen and (min-device-width : 960px) {
+	.card {
+	   max-width: 25%;
+	}
 }
 
-/*
-attempt to find a suitable width and let the cards stretch until another would fit, then shrink and wrao
-The numbers are very wrong now.
-*/
+body {
+    margin: 0;
+}
 
+.cards {
+    box-sizing: content-box;
+	display: flex;
+    flex-wrap: wrap;
+}
 
 .card {
-	display: inline-block;
-    min-width: 239;
 	border: 1px solid black;
-	text-overflow: clip;
+    box-sizing: border-box;
+    flex: 1 1 240px;
+    min-width: 240;
 }
 
 .card .track {
-	border: 1px solid green;
+    background-color: turquoise;
+	text-overflow: clip;
 }
 
 .card .title {
     font-style: italic;
+	text-overflow: clip;
 }
 
 .card .artist {
 	font-weight: bold;
-    border: 1px solid blue;
+    background-color: cyan;
+	text-overflow: clip;
 }
 
 .track,.artist {

@@ -1,14 +1,14 @@
-<div class="card">
-    <div class="track">
-	    <div class="selector" data-ng-bind="card.id_a"></div>
-	    <div class="text" data-ng-bind="card.title_a"></div>
-    </div>
-    <div class="artist">
-        <div class="selector"></div>
-        <div class="text" data-ng-bind="card.artist"></div>
-    </div>
-    <div class="track">
-		<div class="selector" data-ng-bind="card.id_b"></div>
-		<div class="text" data-ng-bind="card.title_b"></div>
-    </div>
+<div class="track">
+    <span class="selector" data-ng-bind="card.id_a"></span>
+    <span> - </span>
+    <span class="title" data-ng-bind="card.title_a"></span>
+</div>
+<div class="artist">
+    <span class="selector"></span>
+    <span class="text" data-ng-bind="card.artist"></span>
+</div>
+<div class="track">
+    <span class="selector" data-ng-bind="card.id_b"></span>
+    <span> - </span>
+    <span class="title" data-ng-bind="card.title_b"></span>
 </div>

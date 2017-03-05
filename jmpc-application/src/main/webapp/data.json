@@ -1,23 +1,37 @@
 { "cards":[
     {
         "artist":"Meatloaf",
-        "id_a": "A1",
+        "id_a": "1",
         "title_a":"Midnight at the Lost and Found",
-        "id_b": "A2",
+        "id_b": "2",
         "title_b":"Paradise by the Dashboard Light"
     },
     {
         "artist": "Def Leppard",
-        "id_a": "A3",
+        "id_a": "3",
         "title_a": "Rock Rock (Till You Drop)",
-        "id_b": "A4",
+        "id_b": "4",
         "title_b": "Photograph"
     },
     {
         "artist": "AC/DC",
-        "id_a": "A5",
+        "id_a": "5",
         "title_a": "Who Made Who",
-        "id_b": "A6",
+        "id_b": "6",
         "title_b": "Thunderstruck"
+    },
+    {
+        "artist": "Mötley Crüe",
+        "id_a": 7,
+        "title_a": "Wild Side",
+        "id_b": 8,
+        "title_b": "Girls, Girls, Girls"
+    },
+    {
+        "artist": "Ozzy Osbourne",
+        "id_a": 7,
+        "title_a": "Mr. Tinkertrain",
+        "id_b": 8,
+        "title_b": "I Don't Want to Change the World"
     }
 ]}
