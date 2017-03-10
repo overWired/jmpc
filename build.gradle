@@ -2,7 +2,7 @@ buildscript {
 
 	ext.versions = [
 	   gradle: '3.3',
-	   springBoot: '1.4.3.RELEASE',
+	   springBoot: '1.5.2.RELEASE',
 	   springCloudDependencies: 'Camden.RELEASE'
     ]
 
@@ -18,6 +18,8 @@ buildscript {
 
 }
 
+plugins { id "io.spring.dependency-management" version "1.0.0.RELEASE" }
+
 
 allprojects {
     apply plugin: 'eclipse'
@@ -30,20 +32,21 @@ subprojects {
 
     repositories(requiredRepositories)
 
-    dependencies {
-        compile('org.springframework.boot:spring-boot-starter-actuator')
-        compile('org.springframework.boot:spring-boot-starter-cache')
-        compile('org.springframework.cloud:spring-cloud-starter-sleuth')
-        compile('org.springframework.boot:spring-boot-starter-web') {
-            exclude module: 'spring-boot-starter-tomcat'
+    apply plugin: 'io.spring.dependency-management'
+    dependencyManagement {
+        imports {
+            mavenBom("org.springframework.boot:spring-boot-dependencies:${versions.springBoot}")
         }
-        compile('org.springframework.boot:spring-boot-starter-jetty')
+    }
+
+    dependencies {
+        compile('org.springframework.boot:spring-boot-starter')
+        compile('org.springframework.boot:spring-boot-starter-cache')
         compileOnly('org.projectlombok:lombok')
         testCompile('org.springframework.boot:spring-boot-starter-test')
     }
-    
-}
 
+}
 
 
 /**

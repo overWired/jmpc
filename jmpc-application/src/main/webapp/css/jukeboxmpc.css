@@ -1,10 +1,12 @@
 @media only screen and (max-device-width : 479px) {
 	.card {
+	   line-height: 1.5;
 	   max-width: 100%;
 	}
 }
 @media only screen and (min-device-width : 480px) and (max-device-width : 719px) {
 	.card {
+	   line-height: 1.25;
 	   max-width: 50%;
 	}
 }
@@ -21,6 +23,8 @@
 
 body {
     margin: 0;
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 1.3em;
 }
 
 .cards {
@@ -30,28 +34,29 @@ body {
 }
 
 .card {
-	border: 1px solid black;
+    background: linear-gradient(rgb(255,204,204),rgb(255,102,102),rgb(255,204,204));
+	border: 1px solid red;
     box-sizing: border-box;
     flex: 1 1 240px;
+    margin: 0 0 8px 0;
     min-width: 240;
 }
 
 .card .track {
-    background-color: turquoise;
 	text-overflow: clip;
 }
 
-.card .title {
+.track .title {
     font-style: italic;
 	text-overflow: clip;
 }
 
 .card .artist {
 	font-weight: bold;
-    background-color: cyan;
 	text-overflow: clip;
 }
 
 .track,.artist {
     text-align: center;
+    padding: 2px 0 2px 0;
 }

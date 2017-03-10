@@ -1,3 +1,8 @@
 rootProject.name = 'Jukebox Music Player Client'
 
 include ':jmpc-application'
+include ':jmpc-business-service'
+include ':jmpc-controller'
+include ':jmpc-domain-application'
+include ':jmpc-domain-service'
+include ':jmpc-domain-view'

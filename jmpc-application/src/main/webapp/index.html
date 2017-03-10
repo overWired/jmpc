@@ -7,7 +7,10 @@
         <script type="text/javascript" src="js/jukeboxmpc.js"></script>
     </head>
     <body>
-        <h1>Jukebox Media Player Client</h1>
+        <h3>Jukebox Media Player Client</h3>
+        <section id="now_playing">
+
+        </section>
         <section class="cards" ng-controller="CardListController as cardList">
             <div class="card" ng-repeat="card in cards" ng-include="'card.html'"></div>
         </section>
