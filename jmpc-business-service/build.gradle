@@ -1,0 +1,6 @@
+description = 'The business service layer'
+
+dependencies {
+    compile  project(':jmpc-domain-application')
+    compile  project(':jmpc-domain-view')
+}

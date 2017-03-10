@@ -1,7 +1,7 @@
-
+description = 'the controller layer of the application'
 
 dependencies {
+    compile  project(':jmpc-business-service')
     compile  project(':jmpc-domain-view')
-    compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework:spring-web')
 }
