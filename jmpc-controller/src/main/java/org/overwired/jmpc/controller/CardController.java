@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Provide access to Jukbox cards.
+ * Provide access to Jukebox cards.
  */
 @RestController
 public class CardController {
