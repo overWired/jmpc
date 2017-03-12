@@ -1,5 +1,6 @@
 package org.overwired.jmpc.controller;
 
+import lombok.Setter;
 import org.overwired.jmpc.domain.view.Cards;
 import org.overwired.jmpc.service.AvailableMusicService;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Provide access to Jukebox cards.
  */
 @RestController
+@Setter
 public class CardController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CardController.class);
@@ -19,12 +21,9 @@ public class CardController {
     @Autowired
     private AvailableMusicService musicService;
 
-    public CardController() {
-        LOGGER.trace("constructing org.overwired.jmpc.controller.CardController");
-    }
-
     @RequestMapping("/cards")
-    public Cards getCards() {
+    public Cards availableMusic() {
+        LOGGER.trace("retrieving available music from the available music service");
         return musicService.availableMusic();
     }
 
