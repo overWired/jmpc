@@ -1,8 +1,13 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-    compile project(":jmpc-business-service")
-    compile project(":jmpc-controller")
+    compile project(':jmpc-business-service')
+    compile project(':jmpc-controller')
+    compile project(':jmpc-domain-application')
+    compile project(':jmpc-domain-view')
+
+    compile libraries.javaMpd
+
     compile('org.springframework.boot:spring-boot-starter-web') {
         exclude group: 'org.springframework.boot',  module: 'spring-boot-starter-tomcat'
     }

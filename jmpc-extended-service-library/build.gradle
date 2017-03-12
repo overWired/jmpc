@@ -3,4 +3,5 @@ description ='JukeboxMPC Extended Service Library'
 dependencies{
     compile project(':jmpc-domain-application')
     compile project(':jmpc-domain-view')
+    compile libraries.javaMpd
 }

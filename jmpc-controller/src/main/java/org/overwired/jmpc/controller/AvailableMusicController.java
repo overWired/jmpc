@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Setter
-public class CardController {
+public class AvailableMusicController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CardController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AvailableMusicController.class);
 
     @Autowired
     private AvailableMusicService musicService;

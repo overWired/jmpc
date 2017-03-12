@@ -14,20 +14,20 @@ import org.overwired.jmpc.service.AvailableMusicService;
 import java.util.Collections;
 
 /**
- * Tests the CardController class.
+ * Tests the AvailableMusicController class.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class CardControllerTest {
+public class AvailableMusicControllerTest {
 
     private Cards cards;
-    private CardController controller;
+    private AvailableMusicController controller;
     private AvailableMusicService mockAvailableMusicService;
 
     @Before
     public void setUp() throws Exception {
         cards = new Cards(Collections.emptyList());
         mockAvailableMusicService = mock(AvailableMusicService.class);
-        controller = new CardController();
+        controller = new AvailableMusicController();
         controller.setMusicService(mockAvailableMusicService);
     }
 

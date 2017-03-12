@@ -1,19 +1,34 @@
 buildscript {
 
-	ext.versions = [
-	   gradle: '3.3',
-	   springBoot: '1.5.2.RELEASE',
-	   springCloudDependencies: 'Camden.RELEASE'
+    ext.versions = [
+            commonsLang3           : '3.5',
+            gradle                 : '3.3',
+            guava                  : '21.0',
+            javaMpd                : '5.0.3',
+            springBoot             : '1.5.2.RELEASE',
+            springCloudDependencies: 'Camden.RELEASE'
     ]
 
-	ext.requiredRepositories = {
-		mavenCentral()
-	}
+    ext.libraries = [
+            commmonsLang3         : "org.apache.commons:commons-lang3:${versions.commonsLang3}",
+            guava                 : "com.google.guava:guava:${versions.guava}",
+            javaMpd               : "net.thejavashop:javampd:${versions.javaMpd}",
+            lombok                : 'org.projectlombok:lombok',
+            springBootStarter     : 'org.springframework.boot:spring-boot-starter',
+            springBootStarterCache: 'org.springframework.boot:spring-boot-starter-cache',
+            springBootStarterTest : 'org.springframework.boot:spring-boot-starter-test',
+            springContext         : 'org.springframework:spring-context'
+    ]
+
+    ext.requiredRepositories = {
+        mavenLocal()
+        mavenCentral()
+    }
 
     repositories(requiredRepositories)
 
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${versions.springBoot}")
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${versions.springBoot}")
     }
 
 }
@@ -40,14 +55,19 @@ subprojects {
     }
 
     dependencies {
-        compile('org.springframework.boot:spring-boot-starter')
-        compile('org.springframework.boot:spring-boot-starter-cache')
-        compileOnly('org.projectlombok:lombok')
-        testCompile('org.springframework.boot:spring-boot-starter-test')
+        compile(libraries.commmonsLang3,
+                libraries.guava,
+                libraries.springBootStarter,
+                libraries.springBootStarterCache,
+                libraries.springContext
+        )
+
+        compileOnly(libraries.lombok)
+
+        testCompile(libraries.springBootStarterTest)
     }
 
 }
-
 
 /**
  * Allows gradle to packaged as part of the build.  This generates infrastructure files to be committed once.
