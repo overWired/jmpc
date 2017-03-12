@@ -1,18 +1,32 @@
 package org.overwired.jmpc.service;
 
+import static org.hamcrest.Matchers.emptyCollectionOf;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.overwired.jmpc.test.TestResources.loadProperties;
+
+import org.bff.javampd.exception.MPDConnectionException;
+import org.bff.javampd.exception.MPDDatabaseException;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.overwired.jmpc.domain.app.Track;
 import org.overwired.jmpc.domain.view.Card;
 import org.overwired.jmpc.domain.view.Cards;
 import org.overwired.jmpc.esl.AvailableMusicESL;
+import org.overwired.jmpc.test.MapToTrackConverter;
+import org.springframework.core.convert.converter.Converter;
 
+import java.util.Arrays;
 import java.util.Collections;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Tests the AvailableMusicService class.
@@ -20,25 +34,48 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class AvailableMusicServiceTest {
 
+    private static final String PACKAGE = "org/overwired/jmpc/test";
+
     private AvailableMusicService service;
     private AvailableMusicESL mockEsl;
-    private Cards cards;
+    private List<Track> tracks;
 
     @Before
-    public void setup() {
+    public void setup() throws MPDDatabaseException, MPDConnectionException {
+        Converter<Map<String, String>, Track> converter = new MapToTrackConverter();
+        // The order of these tracks (intermixing artists) is vital to this test; please do not reorder the tracks.
+        tracks = Arrays.asList(
+                converter.convert(loadProperties(PACKAGE + "/WhoMadeWho.properties")),
+                converter.convert(loadProperties(PACKAGE + "/Photograph.properties")),
+                converter.convert(loadProperties(PACKAGE + "/YouShookMeAllNightLong.properties"))
+        );
         mockEsl = mock(AvailableMusicESL.class);
-        cards = new Cards(Collections.singletonList(
-                Card.builder().artist("test").build()
-        ));
-        when(mockEsl.availableMusic()).thenReturn(cards);
 
         service = new AvailableMusicService();
         service.setEsl(mockEsl);
     }
 
     @Test
-    public void availableMusic() throws Exception {
-        assertEquals("wrong Cards returned", cards, service.availableMusic());
+    public void shouldReturnEachCardWithMusicFromTheSameArtist() throws Exception {
+        when(mockEsl.availableMusic()).thenReturn(tracks);
+
+        Cards cards = service.availableMusic();
+        assertNotNull("service returned null cards object", cards);
+        List<Card> cardList = cards.getCards();
+        assertThat("returned list of cards was null or empty", cardList, not(emptyCollectionOf(Card.class)));
+        assertEquals("wrong number of cards returned", 2, cardList.size());
+    }
+
+    @Test
+    public void shouldReturnOneSpecialCardWhenNoTracksAreAvailable() throws Exception {
+        when(mockEsl.availableMusic()).thenReturn(Collections.emptyList());
+
+        Cards cards = service.availableMusic();
+        assertNotNull("service returned null cards object", cards);
+        List<Card> cardList = cards.getCards();
+        assertThat("returned list of cards was null or empty", cardList, not(emptyCollectionOf(Card.class)));
+        assertEquals("expected one special 'no music found' card", 1, cardList.size());
+        assertEquals(AvailableMusicService.NO_MUSIC_FOUND, cardList.get(0).artist);
     }
 
 }

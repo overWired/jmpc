@@ -1,15 +1,18 @@
 package org.overwired.jmpc.esl;
 
+import static org.hamcrest.Matchers.emptyCollectionOf;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.overwired.jmpc.domain.app.Track.builder;
+import static org.overwired.jmpc.test.TestResources.loadProperties;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.bff.javampd.Database;
 import org.bff.javampd.MPD;
 import org.bff.javampd.exception.MPDConnectionException;
+import org.bff.javampd.exception.MPDResponseException;
 import org.bff.javampd.objects.MPDSong;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,13 +20,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.overwired.jmpc.domain.app.Track;
-import org.overwired.jmpc.domain.view.Card;
-import org.overwired.jmpc.domain.view.Cards;
+import org.overwired.jmpc.test.MapToMPDSongConverter;
+import org.overwired.jmpc.test.MapToTrackConverter;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.converter.Converter;
 
-import java.io.File;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -37,15 +39,17 @@ public class AvailableMusicESLTest {
     private static final String ARTIST = "artist";
     private static final String TITLE = "title";
     private static final String TRACK = "track";
-    private static final Map<String, String> PHOTOGRAPH = ImmutableMap
-            .of(ALBUM, "Pyromania", ARTIST, "Def Leppard", TITLE, "Photograph", TRACK, "1");
-    private static final Map<String, String> WHO_MADE_WHO = ImmutableMap
-            .of(ALBUM, "Who Made Who", ARTIST, "AC/DC", TITLE, "Who Made Who", TRACK, "1");
-    private static final Map<String, String> YOU_SHOOK_ME = ImmutableMap
-            .of(ALBUM, "Who Made Who", ARTIST, "AC/DC", TITLE, "You Shook Me All Night Long", TRACK, "2");
+    private static final String PACKAGE = "org/overwired/jmpc/test";
+    private static final Map<String, String> PHOTOGRAPH = loadProperties(PACKAGE + "/Photograph.properties");
+    private static final Map<String, String> WHO_MADE_WHO = loadProperties(PACKAGE + "/WhoMadeWho.properties");
+    private static final Map<String, String> YOU_SHOOK_ME = loadProperties(PACKAGE + "/YouShookMeAllNightLong.properties");
 
-    private static final String WRONG_NUMBER_OF_CARDS_PRODUCED = "wrong number of cards produced";
-
+    MPDSong mpdWhoMadeWho;
+    MPDSong mpdPhotograph;
+    MPDSong mpdYouShookMe;
+    Track trackWhoMadeWho;
+    Track trackPhotograph;
+    Track trackYouShookMe;
     private AvailableMusicESL esl;
     @Mock
     private ConversionService mockConversionService;
@@ -56,33 +60,22 @@ public class AvailableMusicESLTest {
     @Mock
     private MPD mockMPD;
 
-    MPDSong mpdWhoMadeWho;
-    MPDSong mpdPhotograph;
-    MPDSong mpdYouShookMe;
-    Track trackWhoMadeWho;
-    Track trackPhotograph;
-    Track trackYouShookMe;
-
     @Before
     public void setup() throws MPDConnectionException {
-        mpdWhoMadeWho = createMPDSong(WHO_MADE_WHO);
-        mpdPhotograph = createMPDSong(PHOTOGRAPH);
-        mpdYouShookMe = createMPDSong(YOU_SHOOK_ME);
-        trackWhoMadeWho = createTrack(WHO_MADE_WHO);
-        trackPhotograph = createTrack(PHOTOGRAPH);
-        trackYouShookMe = createTrack(YOU_SHOOK_ME);
-
+        setupMPDSongs();
+        setupTracks();
 
         esl = new AvailableMusicESL();
         esl.setConversionService(mockConversionService);
 
         when(mockMPD.getDatabase()).thenReturn(mockDatabase);
+        when(mockMPD.isConnected()).thenReturn(true);
         when(mockMpdBuilder.build()).thenReturn(mockMPD);
         esl.setMpdBuilder(mockMpdBuilder);
     }
 
     @Test
-    public void cardsCombineArtistsAfterSortingTracks() throws Exception {
+    public void retrievesSongListAndReturnsEquivalentTracks() throws Exception {
         Collection<MPDSong> songs = Lists.newArrayList(mpdWhoMadeWho, mpdPhotograph, mpdYouShookMe);
         when(mockDatabase.listAllSongs()).thenReturn(songs);
 
@@ -90,42 +83,30 @@ public class AvailableMusicESLTest {
         when(mockConversionService.convert(mpdPhotograph, Track.class)).thenReturn(trackPhotograph);
         when(mockConversionService.convert(mpdYouShookMe, Track.class)).thenReturn(trackYouShookMe);
 
-        Cards cards = esl.availableMusic();
-        assertNotNull(cards);
-        List<Card> cardList = cards.getCards();
-        assertEquals(WRONG_NUMBER_OF_CARDS_PRODUCED, 2, cardList.size());
+        List<Track> tracks = esl.availableMusic();
+        assertThat("null or empty track list", tracks, not(emptyCollectionOf(Track.class)));
+        assertEquals("wrong number of tracks produced", 3, tracks.size());
+        verifyMPDInteractions();
     }
 
-    @Test
-    public void cardsSplitDifferentArtistsAfterSortingTracks() throws Exception {
-        Collection<MPDSong> songs = Lists.newArrayList(mpdWhoMadeWho, mpdPhotograph);
-        when(mockDatabase.listAllSongs()).thenReturn(songs);
-
-        when(mockConversionService.convert(mpdWhoMadeWho, Track.class)).thenReturn(trackWhoMadeWho);
-        when(mockConversionService.convert(mpdPhotograph, Track.class)).thenReturn(trackPhotograph);
-
-        Cards cards = esl.availableMusic();
-        assertNotNull(cards);
-        List<Card> cardList = cards.getCards();
-        assertEquals(WRONG_NUMBER_OF_CARDS_PRODUCED, 2, cardList.size());
+    private void setupMPDSongs() {
+        Converter<Map<String, String>, MPDSong> converter = new MapToMPDSongConverter();
+        mpdWhoMadeWho = converter.convert(WHO_MADE_WHO);
+        mpdPhotograph = converter.convert(PHOTOGRAPH);
+        mpdYouShookMe = converter.convert(YOU_SHOOK_ME);
     }
 
-    private Track createTrack(Map<String, String> data) {
-        return Track.builder().album(data.get(ALBUM))
-                .artist(data.get(ARTIST))
-                .title(data.get(TITLE))
-                .trackNumber(Integer.valueOf(data.get(TRACK)))
-                .build();
+    private void setupTracks() {
+        Converter<Map<String, String>, Track> converter = new MapToTrackConverter();
+        trackWhoMadeWho = converter.convert(WHO_MADE_WHO);
+        trackPhotograph = converter.convert(PHOTOGRAPH);
+        trackYouShookMe = converter.convert(YOU_SHOOK_ME);
     }
 
-    private MPDSong createMPDSong(Map<String, String> data) {
-        MPDSong mpdSong = new MPDSong();
-        mpdSong.setFile(data.get(ARTIST)+"_"+data.get(ALBUM)+"_"+data.get(TITLE));
-        mpdSong.setAlbumName(data.get(ALBUM));
-        mpdSong.setArtistName(data.get(ARTIST));
-        mpdSong.setTitle(data.get(TITLE));
-        mpdSong.setTrack(Integer.valueOf(data.get(TRACK)));
-        return mpdSong;
+    private void verifyMPDInteractions() throws MPDResponseException {
+        verify(mockMPD).getDatabase();
+        verify(mockMPD).isConnected();
+        verify(mockMPD).close();
     }
 
 }

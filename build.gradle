@@ -1,6 +1,7 @@
 buildscript {
 
     ext.versions = [
+            commonsCollections4    : '4.1',
             commonsLang3           : '3.5',
             gradle                 : '3.3',
             guava                  : '21.0',
@@ -10,6 +11,7 @@ buildscript {
     ]
 
     ext.libraries = [
+            commonsCollections4   : "org.apache.commons:commons-collections4:${versions.commonsCollections4}",
             commmonsLang3         : "org.apache.commons:commons-lang3:${versions.commonsLang3}",
             guava                 : "com.google.guava:guava:${versions.guava}",
             javaMpd               : "net.thejavashop:javampd:${versions.javaMpd}",
@@ -55,7 +57,8 @@ subprojects {
     }
 
     dependencies {
-        compile(libraries.commmonsLang3,
+        compile(libraries.commonsCollections4,
+                libraries.commmonsLang3,
                 libraries.guava,
                 libraries.springBootStarter,
                 libraries.springBootStarterCache,

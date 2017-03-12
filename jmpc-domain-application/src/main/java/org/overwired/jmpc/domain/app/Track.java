@@ -12,6 +12,7 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 public class Track implements Comparable<Track> {
     String album;
     String artist;
+    int id;
     String title;
     int trackNumber;
 
@@ -20,8 +21,8 @@ public class Track implements Comparable<Track> {
         return new CompareToBuilder()
                 .append(this.artist, that.artist)
                 .append(this.album, that.album)
-                .append(this.trackNumber, that.trackNumber)
                 .append(this.title, that.title)
+                .append(this.trackNumber, that.trackNumber)
                 .toComparison();
     }
 

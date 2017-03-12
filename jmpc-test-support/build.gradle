@@ -1,0 +1,6 @@
+description = 'Provides test support classes and resources'
+
+dependencies {
+    compile libraries.javaMpd
+    compile project(':jmpc-domain-application')
+}
