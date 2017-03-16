@@ -1,16 +1,23 @@
 <html ng-app="jmpcApp">
-    <head>
-        <title>Jukebox Media Player Client</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/jukeboxmpc.css">
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
-        <script type="text/javascript" src="js/jukeboxmpc.js"></script>
-    </head>
-    <body>
-        <div id="now_playing">
-        </div>
-        <section class="cards" ng-controller="CardListController as cardList">
-            <div class="card" ng-repeat="card in cards" ng-include="'card.html'"></div>
-        </section>
-    </body>
+<head>
+  <title>Jukebox Media Player Client</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/jukeboxmpc.css">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+  <script type="text/javascript" src="js/jukeboxmpc.js"></script>
+</head>
+<body>
+  <div id="info_window">
+    <div id="now_playing">The Current Song Name Here</div>
+    <div id="upcoming">
+      <ul>
+        <li>On Deck</li>
+        <li>In the Hole</li>
+      </ul>
+    </div>
+  </div>
+  <section class="cards" ng-controller="CardListController">
+    <div class="card" ng-repeat="card in cards" ng-include="'card.html'"></div>
+  </section>
+</body>
 </html>

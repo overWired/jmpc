@@ -1,0 +1,5 @@
+description = 'The Service Access Library layer is used in the ESL layer, and provides a service-specific API'
+
+dependencies {
+    compile libraries.javaMpd
+}
