@@ -6,9 +6,6 @@ import org.bff.javampd.Database;
 import org.bff.javampd.MPD;
 import org.bff.javampd.Player;
 import org.bff.javampd.Playlist;
-import org.bff.javampd.ServerStatistics;
-import org.bff.javampd.ServerStatus;
-import org.bff.javampd.StandAloneMonitor;
 import org.bff.javampd.exception.MPDConnectionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,9 +40,9 @@ public class MediaPlayerDaemonSAL {
         return mpd().getDatabase();
     }
 
-    public StandAloneMonitor getMonitor() throws MPDConnectionException {
-        return mpd().getMonitor();
-    }
+//    public StandAloneMonitor getMonitor() throws MPDConnectionException {
+//        return mpd().getMonitor();
+//    }
 
     public Player getPlayer() throws MPDConnectionException {
         return mpd().getPlayer();
@@ -55,11 +52,12 @@ public class MediaPlayerDaemonSAL {
         return mpd().getPlaylist();
     }
 
-    public ServerStatistics getServerStatistics() throws MPDConnectionException {
-        return mpd().getServerStatistics();
-    }
+//    public ServerStatistics getServerStatistics() throws MPDConnectionException {
+//        return mpd().getServerStatistics();
+//    }
 
-    public ServerStatus getServerStatus() throws MPDConnectionException {
-        return mpd().getServerStatus();
-    }
+//    public ServerStatus getServerStatus() throws MPDConnectionException {
+//        return mpd().getServerStatus();
+//    }
+
 }

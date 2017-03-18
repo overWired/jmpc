@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.overwired.jmpc.domain.app.Track;
+import org.overwired.jmpc.sal.MediaPlayerDaemonSAL;
 import org.overwired.jmpc.test.MapToMPDSongConverter;
 import org.overwired.jmpc.test.MapToTrackConverter;
 import org.springframework.core.convert.ConversionService;
@@ -58,7 +59,7 @@ public class AvailableMusicESLTest {
     @Mock
     private MPD.Builder mockMpdBuilder;
     @Mock
-    private MPD mockMPD;
+    private MediaPlayerDaemonSAL mockSal;
 
     @Before
     public void setup() throws MPDConnectionException {
@@ -67,11 +68,9 @@ public class AvailableMusicESLTest {
 
         esl = new AvailableMusicESL();
         esl.setConversionService(mockConversionService);
+        esl.setSal(mockSal);
 
-        when(mockMPD.getDatabase()).thenReturn(mockDatabase);
-        when(mockMPD.isConnected()).thenReturn(true);
-        when(mockMpdBuilder.build()).thenReturn(mockMPD);
-        esl.setMpdBuilder(mockMpdBuilder);
+        when(mockSal.getDatabase()).thenReturn(mockDatabase);
     }
 
     @Test
@@ -103,10 +102,8 @@ public class AvailableMusicESLTest {
         trackYouShookMe = converter.convert(YOU_SHOOK_ME);
     }
 
-    private void verifyMPDInteractions() throws MPDResponseException {
-        verify(mockMPD).getDatabase();
-        verify(mockMPD).isConnected();
-        verify(mockMPD).close();
+    private void verifyMPDInteractions() throws MPDConnectionException, MPDResponseException {
+        verify(mockSal).getDatabase();
     }
 
 }

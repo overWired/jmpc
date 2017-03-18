@@ -7,6 +7,7 @@ import org.bff.javampd.exception.MPDDatabaseException;
 import org.bff.javampd.exception.MPDResponseException;
 import org.bff.javampd.objects.MPDSong;
 import org.overwired.jmpc.domain.app.Track;
+import org.overwired.jmpc.sal.MediaPlayerDaemonSAL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +31,13 @@ public class AvailableMusicESL {
     @Autowired
     private ConversionService conversionService;
     @Autowired
-    private MPD.Builder mpdBuilder;
+    private MediaPlayerDaemonSAL sal;
+
 
     public List<Track> availableMusic() throws MPDConnectionException, MPDDatabaseException {
         LOGGER.trace("retrieving songs from MPD database");
-        MPD mpd = openConnection();
-        Collection<MPDSong> mpdSongs = mpd.getDatabase().listAllSongs();
+        Collection<MPDSong> mpdSongs = sal.getDatabase().listAllSongs();
         LOGGER.trace("found {} songs", mpdSongs.size());
-        closeConnection(mpd);
 
         List<Track> tracks = new ArrayList<>(mpdSongs.size());
         for (MPDSong mpdSong : mpdSongs) {
@@ -47,21 +47,6 @@ public class AvailableMusicESL {
         LOGGER.trace("sorting {} tracks", tracks.size());
         Collections.sort(tracks);
         return tracks;
-    }
-
-
-    private void closeConnection(MPD mpd) {
-        try {
-            if (null != mpd && mpd.isConnected()) {
-                mpd.close();
-            }
-        } catch (MPDResponseException e) {
-            LOGGER.info("failed to close MPD connection: moving on...", e); // INFO since we're ignoring it.
-        }
-    }
-
-    private MPD openConnection() throws MPDConnectionException {
-        return mpdBuilder.build();
     }
 
 }
