@@ -2,12 +2,15 @@ package org.overwired.jmpc.application;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bff.javampd.MPD;
+import org.overwired.jmpc.domain.app.MusicPlayer;
 import org.overwired.jmpc.domain.app.Track;
+import org.overwired.jmpc.domain.view.MusicPlayerView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 import java.net.UnknownHostException;
 
@@ -18,6 +21,7 @@ import java.net.UnknownHostException;
 public class JmpcConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JmpcConfiguration.class);
+    private static final String PROTOTYPE = "prototype";
 
     @Bean
     public MPD.Builder mpdBuilder(@Value("${mpd.host}") String host,
@@ -29,6 +33,19 @@ public class JmpcConfiguration {
     }
 
     @Bean
+    @Scope(PROTOTYPE)
+    public MusicPlayer.MusicPlayerBuilder musicPlayerBuilder() {
+        return MusicPlayer.builder();
+    }
+
+    @Bean
+    @Scope(PROTOTYPE)
+    public MusicPlayerView.MusicPlayerViewBuilder musicPlayerViewBuilder() {
+        return MusicPlayerView.builder();
+    }
+
+    @Bean
+    @Scope(PROTOTYPE)
     public Track.TrackBuilder trackBuilder() {
         return Track.builder();
     }

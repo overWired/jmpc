@@ -7,7 +7,6 @@ import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDDatabaseException;
 import org.overwired.jmpc.domain.app.Track;
 import org.overwired.jmpc.domain.view.Card;
-import org.overwired.jmpc.domain.view.Cards;
 import org.overwired.jmpc.esl.AvailableMusicESL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,20 +24,17 @@ import java.util.List;
 @Setter
 public class AvailableMusicService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AvailableMusicService.class);
     public static final String NO_MUSIC_FOUND = "No Music Found";
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(AvailableMusicService.class);
     @Autowired
     private AvailableMusicESL esl;
 
-    public Cards availableMusic() throws MPDDatabaseException, MPDConnectionException {
+    public List<Card> availableMusic() throws MPDDatabaseException, MPDConnectionException {
         List<Track> tracks = esl.availableMusic();
         List<Card> cardList = createCards(tracks);
-        Cards cards = new Cards(cardList);
-        LOGGER.trace("returning available music cards: {}", cards);
-        return cards;
+        logCardsToBeReturned(cardList);
+        return cardList;
     }
-
 
     private List<Card> createCards(List<Track> tracks) {
         List<Card> cardList;
@@ -72,6 +67,11 @@ public class AvailableMusicService {
 
     private int estimateNumberOfCards(List<Track> tracks) {
         return Math.round(tracks.size() / 2);
+    }
+
+    private void logCardsToBeReturned(List<Card> cardList) {
+        LOGGER.debug("returning {} music cards", cardList.size());
+        LOGGER.trace("details of music cards: {}", cardList);
     }
 
     private String zeroPaddedCardId(int trackIndex) {

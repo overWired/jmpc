@@ -1,4 +1,4 @@
-package org.overwired.jmpc.esl;
+package org.overwired.jmpc.esl.converter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.overwired.jmpc.domain.app.Track;
+import org.overwired.jmpc.esl.converter.MPDSongToTrackConverter;
 
 /**
  * Tests the MPDSongToTrackConverter class.

@@ -23,10 +23,12 @@ public class MediaPlayerDaemonSAL {
     @Autowired
     @Setter
     private MPD.Builder builder;
+    private int connectCount = 0;
     private MPD _mpd;
 
     private synchronized MPD mpd() throws MPDConnectionException {
         if (null == _mpd || !_mpd.isConnected()) {
+            LOGGER.debug("MPD is null or disconnected - reconnecting.  count={}", ++connectCount);
             _mpd = builder.build();
         }
         return _mpd;

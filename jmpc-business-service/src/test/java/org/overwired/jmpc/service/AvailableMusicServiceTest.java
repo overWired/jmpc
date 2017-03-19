@@ -11,14 +11,12 @@ import static org.overwired.jmpc.test.TestResources.loadProperties;
 
 import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDDatabaseException;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.overwired.jmpc.domain.app.Track;
 import org.overwired.jmpc.domain.view.Card;
-import org.overwired.jmpc.domain.view.Cards;
 import org.overwired.jmpc.esl.AvailableMusicESL;
 import org.overwired.jmpc.test.MapToTrackConverter;
 import org.springframework.core.convert.converter.Converter;
@@ -59,23 +57,19 @@ public class AvailableMusicServiceTest {
     public void shouldReturnEachCardWithMusicFromTheSameArtist() throws Exception {
         when(mockEsl.availableMusic()).thenReturn(tracks);
 
-        Cards cards = service.availableMusic();
-        assertNotNull("service returned null cards object", cards);
-        List<Card> cardList = cards.getCards();
-        assertThat("returned list of cards was null or empty", cardList, not(emptyCollectionOf(Card.class)));
-        assertEquals("wrong number of cards returned", 2, cardList.size());
+        List<Card> cards = service.availableMusic();
+        assertThat("returned list of cards was null or empty", cards, not(emptyCollectionOf(Card.class)));
+        assertEquals("wrong number of cards returned", 2, cards.size());
     }
 
     @Test
     public void shouldReturnOneSpecialCardWhenNoTracksAreAvailable() throws Exception {
         when(mockEsl.availableMusic()).thenReturn(Collections.emptyList());
 
-        Cards cards = service.availableMusic();
-        assertNotNull("service returned null cards object", cards);
-        List<Card> cardList = cards.getCards();
-        assertThat("returned list of cards was null or empty", cardList, not(emptyCollectionOf(Card.class)));
-        assertEquals("expected one special 'no music found' card", 1, cardList.size());
-        assertEquals(AvailableMusicService.NO_MUSIC_FOUND, cardList.get(0).artist);
+        List<Card> cards = service.availableMusic();
+        assertThat("returned list of cards was null or empty", cards, not(emptyCollectionOf(Card.class)));
+        assertEquals("expected one special 'no music found' card", 1, cards.size());
+        assertEquals(AvailableMusicService.NO_MUSIC_FOUND, cards.get(0).getArtist());
     }
 
 }
