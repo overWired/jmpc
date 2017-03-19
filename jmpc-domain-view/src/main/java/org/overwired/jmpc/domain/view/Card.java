@@ -9,7 +9,7 @@ import lombok.Value;
 @Builder
 @Value
 public class Card {
-    public String artist;
+    String artist;
     String id_a;
     String id_b;
     String title_a;
