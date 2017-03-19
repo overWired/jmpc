@@ -1,4 +1,4 @@
-{ "cards":[
+[
     {
         "artist":"Meatloaf",
         "id_a": "1",
@@ -34,4 +34,4 @@
         "id_b": 8,
         "title_b": "I Don't Want to Change the World"
     }
-]}
+]
