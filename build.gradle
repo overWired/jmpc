@@ -16,6 +16,7 @@ buildscript {
             guava                 : "com.google.guava:guava:${versions.guava}",
             javaMpd               : "net.thejavashop:javampd:${versions.javaMpd}",
             lombok                : 'org.projectlombok:lombok',
+            springBootDevTools    : 'org.springframework.boot:spring-boot-devtools',
             springBootStarter     : 'org.springframework.boot:spring-boot-starter',
             springBootStarterCache: 'org.springframework.boot:spring-boot-starter-cache',
             springBootStarterTest : 'org.springframework.boot:spring-boot-starter-test',
