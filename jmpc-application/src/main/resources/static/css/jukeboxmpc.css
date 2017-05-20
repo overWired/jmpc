@@ -1,9 +1,19 @@
 
+a:link, a:visited {
+    color: Black;
+    text-decoration: none;
+}
+
+a:hover, a:active {
+    color: DarkSlateGray;
+    text-decoration: none;
+}
+
 body {
     height: 100%;
     margin: 0;
     font-family: Tahoma, Geneva, sans-serif;
-    font-size: 1.0em;
+    font-size: 1.1em;
 }
 
 #header {
@@ -41,6 +51,28 @@ body {
     overflow: scroll;
 }
 
+.card {
+    background: linear-gradient(
+        rgb(255,204,204),
+        rgb(255,204,204),
+        rgb(255,153,153),
+        rgb(255,102,102),
+        rgb(255,153,153),
+        rgb(255,204,204),
+        rgb(255,204,204)
+    );
+    border: 1px solid red;
+    height: 72px;
+    margin: 1px;
+    text-align: center;
+}
+
+.card>div, .card>div>span {
+    height: 24px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @media only screen and (min-device-width : 640px) and (max-device-width : 959px) {
     #music_selections {
         column-count: 2;
@@ -63,26 +95,4 @@ body {
     #music_selections {
         column-count: 5;
     }
-}
-
-.card {
-    background: linear-gradient(
-        rgb(255,204,204),
-        rgb(255,204,204),
-        rgb(255,153,153),
-        rgb(255,102,102),
-        rgb(255,153,153),
-        rgb(255,204,204),
-        rgb(255,204,204)
-    );
-    border: 1px solid red;
-    height: 72px;
-    margin: 1px;
-    text-align: center;
-}
-
-.card>div, .card>div>span {
-    height: 24px;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
