@@ -41,28 +41,11 @@ public class MPDPlayerToMusicPlayerConverter implements Converter<MPDPlayer, Mus
                 }
                 builder.currentSong(title);
                 builder.status(playerStatusConverter.convert(source.getStatus()));
-            } catch (MPDPlayerException e) {
+            } catch (MPDPlayerException | NullPointerException e) {
                 LOGGER.error("failed to access player data", e);
             }
         }
         return builder.build();
     }
-
-//    private String convert(Player.Status source) {
-//        String status = "UNRECOGNIZED";
-//        switch (source) {
-//            case STATUS_PAUSED:
-//                status = "paused";
-//                break;
-//            case STATUS_PLAYING:
-//                status = "playing";
-//                break;
-//            case STATUS_STOPPED:
-//                status = "stopped";
-//                break;
-//        }
-//        return status;
-//    }
-//
 
 }

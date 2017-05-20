@@ -1,81 +1,88 @@
-@media only screen and (max-device-width : 479px) {
-	.card {
-       height: 100px;
-	   line-height: 1.5;
-	   max-width: 100%;
-	}
-}
-@media only screen and (min-device-width : 480px) and (max-device-width : 719px) {
-	.card {
-	   height: 112px;
-	   line-height: 1.25;
-	   max-width: 50%;
-	}
-}
-@media only screen and (min-device-width : 720px) and (max-device-width : 959px) {
-	.card {
-        height: 90px;
-	   max-width: 33%;
-	}
-}
-@media only screen and (min-device-width : 960px) {
-	.card {
-        height: 90px;
-	   max-width: 25%;
-	}
-}
 
 body {
+    height: 100%;
     margin: 0;
     font-family: Tahoma, Geneva, sans-serif;
-    font-size: 1.2em;
+    font-size: 1.0em;
 }
 
-#info_window {
-	height: 5em;
-	padding: 4px, 0, 4px, 0;
+#header {
+    border: 1px solid blue;
+    box-sizing: border-box; /* include the border within the height and width */
+
+    height: 100px;
+    width: 100%;
+
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    background: #eeeeee;
+    -webkit-box-shadow: 0 7px 8px rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 7px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 7px 8px rgba(0, 0, 0, 0.12);
+}
+
+#status {
+    float: left;
+    width: 90%;
     text-align: center;
 }
 
-#upcoming ul {
+#play_queue {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
 
-.cards {
-    box-sizing: content-box;
-	display: flex;
-    flex-wrap: wrap;
+#music_selections {
+    column-gap: 0;
+    height: 100%;
+    margin-top: 100px;
+    overflow: scroll;
+}
+
+@media only screen and (min-device-width : 640px) and (max-device-width : 959px) {
+    #music_selections {
+        column-count: 2;
+    }
+}
+
+@media only screen and (min-device-width : 960px) and (max-device-width : 1279px) {
+    #music_selections {
+        column-count: 3;
+    }
+}
+
+@media only screen and (min-device-width : 1280px) and (max-device-width : 1599px) {
+    #music_selections {
+        column-count: 4;
+    }
+}
+
+@media only screen and (min-device-width : 1600px) {
+    #music_selections {
+        column-count: 5;
+    }
 }
 
 .card {
-    background: linear-gradient(rgb(255,204,204),rgb(255,102,102),rgb(255,204,204));
-	border: 1px solid red;
-    box-sizing: border-box;
-    flex: 1 1 240px;
-    margin: 0 0 8px 0;
-    min-width: 240;
-
-    overflow: hidden;
-	text-overflow: clip;
-}
-
-.card .artist {
-    font-size: -0.3em;
-	font-weight: bold;
-}
-
-.card .artist,.track {
-    padding: 2px 0 2px 0;
+    background: linear-gradient(
+        rgb(255,204,204),
+        rgb(255,204,204),
+        rgb(255,153,153),
+        rgb(255,102,102),
+        rgb(255,153,153),
+        rgb(255,204,204),
+        rgb(255,204,204)
+    );
+    border: 1px solid red;
+    height: 72px;
+    margin: 1px;
     text-align: center;
 }
 
-.track .selector {
-    margin-right: 4px;
-    text-align: left;
-}
-
-.track .title {
-    font-style: italic;
+.card>div, .card>div>span {
+    height: 24px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
