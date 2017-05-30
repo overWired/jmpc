@@ -13,7 +13,7 @@ app.controller('MusicPlayerController', function($scope, $http) {
 });
 
 app.controller("PlaylistController", function($scope, $http) {
-	$http.get("playlist.json").then(function(response) {
+	$http.get("data/playlist.json").then(function(response) {
 		$scope.playlist = response.data;
 	});
 });

@@ -10,11 +10,13 @@
 </head>
 <body>
   <header id="header">
-    <section id="status" data-ng-controller="MusicPlayerController">
-      <span id="current_song">{{player.currentSong}}</span>
-      <ul id="play_queue" data-ng-controller="PlaylistController">
-        <li data-ng-repeat="song in playlist">{{song.artist}} - {{song.title}}</li>
-      </ul>
+    <section id="player" data-ng-controller="MusicPlayerController">
+      <section id="status">{{player.currentSong}} «{{player.status}}»</section>
+      <div id="play_queue">
+        <ul data-ng-controller="PlaylistController">
+          <li data-ng-repeat="song in playlist" data-ng-include="'playlist-item.html'"></li>
+        </ul>
+      </div>
     </section>
   </header>
   <section id="music_selections" data-ng-controller="CardListController">
