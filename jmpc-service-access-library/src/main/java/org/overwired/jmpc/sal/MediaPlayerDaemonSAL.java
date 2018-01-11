@@ -1,12 +1,13 @@
 package org.overwired.jmpc.sal;
 
 import lombok.Setter;
-import org.bff.javampd.Admin;
-import org.bff.javampd.Database;
-import org.bff.javampd.MPD;
-import org.bff.javampd.Player;
-import org.bff.javampd.Playlist;
-import org.bff.javampd.exception.MPDConnectionException;
+import org.bff.javampd.admin.Admin;
+import org.bff.javampd.database.MusicDatabase;
+import org.bff.javampd.server.MPD;
+import org.bff.javampd.player.Player;
+import org.bff.javampd.playlist.Playlist;
+import org.bff.javampd.server.MPDConnectionException;
+import org.bff.javampd.song.SongSearcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +39,6 @@ public class MediaPlayerDaemonSAL {
         return mpd().getAdmin();
     }
 
-    public Database getDatabase() throws MPDConnectionException {
-        return mpd().getDatabase();
-    }
-
-//    public StandAloneMonitor getMonitor() throws MPDConnectionException {
-//        return mpd().getMonitor();
-//    }
-
     public Player getPlayer() throws MPDConnectionException {
         return mpd().getPlayer();
     }
@@ -54,12 +47,8 @@ public class MediaPlayerDaemonSAL {
         return mpd().getPlaylist();
     }
 
-//    public ServerStatistics getServerStatistics() throws MPDConnectionException {
-//        return mpd().getServerStatistics();
-//    }
-
-//    public ServerStatus getServerStatus() throws MPDConnectionException {
-//        return mpd().getServerStatus();
-//    }
+    public SongSearcher getSongSearcher() {
+        return mpd().getSongSearcher();
+    }
 
 }

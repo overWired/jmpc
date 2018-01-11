@@ -1,13 +1,13 @@
 package org.overwired.jmpc.esl.converter;
 
-import static org.bff.javampd.Player.Status.STATUS_PLAYING;
+import static org.bff.javampd.player.Player.Status.STATUS_PLAYING;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
-import org.bff.javampd.MPDPlayer;
-import org.bff.javampd.objects.MPDSong;
+import org.bff.javampd.player.MPDPlayer;
+import org.bff.javampd.song.MPDSong;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,8 +36,7 @@ public class MPDPlayerToMusicPlayerConverterTest {
 
     @Before
     public void setUp() throws Exception {
-        MPDSong mpdSong = new MPDSong();
-        mpdSong.setTitle(CURRENT_SONG);
+        MPDSong mpdSong = new MPDSong("file_name", CURRENT_SONG);
         when(mockPlayer.getCurrentSong()).thenReturn(mpdSong);
         when(mockPlayer.getStatus()).thenReturn(STATUS_PLAYING);
 

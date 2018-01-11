@@ -4,13 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
-import org.bff.javampd.objects.MPDSong;
+import org.bff.javampd.song.MPDSong;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.overwired.jmpc.domain.app.Track;
-import org.overwired.jmpc.esl.converter.MPDSongToTrackConverter;
 
 /**
  * Tests the MPDSongToTrackConverter class.
@@ -59,10 +58,9 @@ public class MPDSongToTrackConverterTest {
     }
 
     private void setupMpdSong() {
-        mpdSong = new MPDSong();
+        mpdSong = new MPDSong("file_name", TITLE);
         mpdSong.setAlbumName(ALBUM);
         mpdSong.setArtistName(ARTIST);
-        mpdSong.setTitle(TITLE);
         mpdSong.setTrack(TRACK);
     }
 

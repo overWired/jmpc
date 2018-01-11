@@ -3,8 +3,7 @@ package org.overwired.jmpc.service;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.bff.javampd.exception.MPDConnectionException;
-import org.bff.javampd.exception.MPDDatabaseException;
+import org.bff.javampd.server.MPDConnectionException;
 import org.overwired.jmpc.domain.app.Track;
 import org.overwired.jmpc.domain.view.Card;
 import org.overwired.jmpc.esl.AvailableMusicESL;
@@ -29,7 +28,7 @@ public class AvailableMusicService {
     @Autowired
     private AvailableMusicESL esl;
 
-    public List<Card> availableMusic() throws MPDDatabaseException, MPDConnectionException {
+    public List<Card> availableMusic() throws MPDConnectionException {
         List<Track> tracks = esl.availableMusic();
         List<Card> cardList = createCards(tracks);
         logCardsToBeReturned(cardList);

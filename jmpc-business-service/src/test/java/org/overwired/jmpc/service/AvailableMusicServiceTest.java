@@ -3,14 +3,12 @@ package org.overwired.jmpc.service;
 import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.overwired.jmpc.test.TestResources.loadProperties;
 
-import org.bff.javampd.exception.MPDConnectionException;
-import org.bff.javampd.exception.MPDDatabaseException;
+import org.bff.javampd.server.MPDConnectionException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +37,7 @@ public class AvailableMusicServiceTest {
     private List<Track> tracks;
 
     @Before
-    public void setup() throws MPDDatabaseException, MPDConnectionException {
+    public void setup() throws MPDConnectionException {
         Converter<Map<String, String>, Track> converter = new MapToTrackConverter();
         // The order of these tracks (intermixing artists) is vital to this test; please do not reorder the tracks.
         tracks = Arrays.asList(

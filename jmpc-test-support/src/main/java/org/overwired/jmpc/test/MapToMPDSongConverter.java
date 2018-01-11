@@ -1,6 +1,6 @@
 package org.overwired.jmpc.test;
 
-import org.bff.javampd.objects.MPDSong;
+import org.bff.javampd.song.MPDSong;
 import org.springframework.core.convert.converter.Converter;
 
 import java.util.Map;
@@ -17,11 +17,12 @@ public class MapToMPDSongConverter implements Converter<Map<String, String>, MPD
 
     @Override
     public MPDSong convert(Map<String, String> source) {
-        MPDSong mpdSong = new MPDSong();
-        mpdSong.setFile(source.get(ARTIST) + "_" + source.get(ALBUM) + "_" + source.get(TITLE));
+        String title = source.get(TITLE);
+        String filename = source.get(ARTIST) + "_" + source.get(ALBUM) + "_" + title;
+
+        MPDSong mpdSong = new MPDSong(filename, title);
         mpdSong.setAlbumName(source.get(ALBUM));
         mpdSong.setArtistName(source.get(ARTIST));
-        mpdSong.setTitle(source.get(TITLE));
         mpdSong.setTrack(Integer.valueOf(source.get(TRACK)));
         return mpdSong;
     }

@@ -3,12 +3,13 @@ package org.overwired.jmpc.sal;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-import org.bff.javampd.Admin;
-import org.bff.javampd.Database;
-import org.bff.javampd.MPD;
-import org.bff.javampd.Player;
-import org.bff.javampd.Playlist;
-import org.bff.javampd.exception.MPDConnectionException;
+import org.bff.javampd.admin.Admin;
+import org.bff.javampd.database.MusicDatabase;
+import org.bff.javampd.server.MPD;
+import org.bff.javampd.player.Player;
+import org.bff.javampd.playlist.Playlist;
+import org.bff.javampd.server.MPDConnectionException;
+import org.bff.javampd.song.SongSearcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -67,11 +68,11 @@ public class MediaPlayerDaemonSALTest {
     }
 
     @Test
-    public void testGetDatabase() throws MPDConnectionException {
-        Database mockDatabase = mock(Database.class);
-        when(mockMPD.getDatabase()).thenReturn(mockDatabase);
+    public void shouldExposeTheSongSearcher() throws MPDConnectionException {
+        SongSearcher mockSongSearcher = mock(SongSearcher.class);
+        when(mockMPD.getSongSearcher()).thenReturn(mockSongSearcher);
 
-        assertEquals("wrong database object returned", mockDatabase, sal.getDatabase());
+        assertEquals("wrong song searcher object returned", mockSongSearcher, sal.getSongSearcher());
     }
 
     @Test
@@ -90,6 +91,5 @@ public class MediaPlayerDaemonSALTest {
 
         assertEquals("wrong playlist", mockPlaylist, sal.getPlaylist());
     }
-    
 
 }

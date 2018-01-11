@@ -1,7 +1,7 @@
 package org.overwired.jmpc.application;
 
 import org.apache.commons.lang3.StringUtils;
-import org.bff.javampd.MPD;
+import org.bff.javampd.server.MPD;
 import org.overwired.jmpc.domain.app.MusicPlayer;
 import org.overwired.jmpc.domain.app.Track;
 import org.overwired.jmpc.domain.view.MusicPlayerView;

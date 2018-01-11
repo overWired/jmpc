@@ -2,7 +2,7 @@ package org.overwired.jmpc.esl.converter;
 
 import lombok.Setter;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.bff.javampd.objects.MPDSong;
+import org.bff.javampd.song.MPDSong;
 import org.overwired.jmpc.domain.app.Track;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

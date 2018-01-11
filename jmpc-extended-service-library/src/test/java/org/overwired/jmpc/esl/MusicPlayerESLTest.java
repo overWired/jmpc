@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
-import org.bff.javampd.Player;
-import org.bff.javampd.exception.MPDConnectionException;
+import org.bff.javampd.player.Player;
+import org.bff.javampd.server.MPDConnectionException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

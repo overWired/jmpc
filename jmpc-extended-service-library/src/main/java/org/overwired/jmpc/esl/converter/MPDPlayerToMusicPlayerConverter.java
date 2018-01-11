@@ -2,10 +2,8 @@ package org.overwired.jmpc.esl.converter;
 
 import lombok.AllArgsConstructor;
 import lombok.Setter;
-import org.bff.javampd.MPDPlayer;
-import org.bff.javampd.Player;
-import org.bff.javampd.exception.MPDPlayerException;
-import org.bff.javampd.objects.MPDSong;
+import org.bff.javampd.player.MPDPlayer;
+import org.bff.javampd.song.MPDSong;
 import org.overwired.jmpc.domain.app.MusicPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +39,7 @@ public class MPDPlayerToMusicPlayerConverter implements Converter<MPDPlayer, Mus
                 }
                 builder.currentSong(title);
                 builder.status(playerStatusConverter.convert(source.getStatus()));
-            } catch (MPDPlayerException | NullPointerException e) {
+            } catch (NullPointerException e) {
                 LOGGER.error("failed to access player data", e);
             }
         }

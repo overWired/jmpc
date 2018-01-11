@@ -1,6 +1,9 @@
 description = 'JMPC Application module'
 
 apply plugin: 'org.springframework.boot'
+bootRepackage {
+    executable = true
+}
 
 dependencies {
     compile project(':jmpc-business-service')

@@ -1,8 +1,6 @@
 package org.overwired.jmpc.esl.converter;
 
-import org.bff.javampd.Player;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.bff.javampd.player.Player;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

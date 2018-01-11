@@ -2,9 +2,9 @@ package org.overwired.jmpc.esl;
 
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
-import org.bff.javampd.exception.MPDConnectionException;
-import org.bff.javampd.exception.MPDDatabaseException;
-import org.bff.javampd.objects.MPDSong;
+import org.bff.javampd.server.MPDConnectionException;
+import org.bff.javampd.song.MPDSong;
+import org.bff.javampd.song.SongSearcher;
 import org.overwired.jmpc.domain.app.Track;
 import org.overwired.jmpc.sal.MediaPlayerDaemonSAL;
 import org.slf4j.Logger;
@@ -29,16 +29,16 @@ public class AvailableMusicESL {
 
     @Autowired
     private ConversionService conversionService;
-    private int numerOfAttempts = 2;
+    private int numberOfAttempts = 2;
     @Autowired
     private MediaPlayerDaemonSAL sal;
 
-    public List<Track> availableMusic() throws MPDConnectionException, MPDDatabaseException {
+    public List<Track> availableMusic() throws MPDConnectionException {
         LOGGER.trace("retrieving songs from MPD database");
         Collection<MPDSong> mpdSongs = Collections.emptyList();
         // Retrying is probably bad form, but MPD seems to be a little flaky getting all songs.
-        for (int attemptsRemaining = numerOfAttempts; attemptsRemaining > 0; attemptsRemaining--) {
-            mpdSongs = sal.getDatabase().listAllSongs();
+        for (int attemptsRemaining = numberOfAttempts; attemptsRemaining > 0; attemptsRemaining--) {
+            mpdSongs = sal.getSongSearcher().search(SongSearcher.ScopeType.ANY, "");
             if (CollectionUtils.isEmpty(mpdSongs)) {
                 LOGGER.warn("song retrieval failed (or no songs present). attemptsRemaining={}", attemptsRemaining);
             } else {

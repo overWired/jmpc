@@ -8,11 +8,12 @@ import static org.mockito.Mockito.*;
 import static org.overwired.jmpc.test.TestResources.loadProperties;
 
 import com.google.common.collect.Lists;
-import org.bff.javampd.Database;
-import org.bff.javampd.MPD;
-import org.bff.javampd.exception.MPDConnectionException;
-import org.bff.javampd.exception.MPDResponseException;
-import org.bff.javampd.objects.MPDSong;
+import org.bff.javampd.database.MusicDatabase;
+import org.bff.javampd.server.MPD;
+import org.bff.javampd.server.MPDConnectionException;
+import org.bff.javampd.song.MPDSong;
+import org.bff.javampd.song.SongDatabase;
+import org.bff.javampd.song.SongSearcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,7 +58,7 @@ public class AvailableMusicESLTest {
     @Mock
     private ConversionService mockConversionService;
     @Mock
-    private Database mockDatabase;
+    private SongSearcher mockSongSearcher;
     @Mock
     private MPD.Builder mockMpdBuilder;
     @Mock
@@ -76,12 +77,12 @@ public class AvailableMusicESLTest {
         esl.setConversionService(mockConversionService);
         esl.setSal(mockSal);
 
-        when(mockSal.getDatabase()).thenReturn(mockDatabase);
+        when(mockSal.getSongSearcher()).thenReturn(mockSongSearcher);
     }
 
     @Test
     public void retrievesSongListAndReturnsEquivalentTracks() throws Exception {
-        when(mockDatabase.listAllSongs()).thenReturn(songs);
+        when(mockSongSearcher.search(SongSearcher.ScopeType.ANY, "")).thenReturn(songs);
 
         List<Track> tracks = esl.availableMusic();
         assertThat("null or empty track list", tracks, not(emptyCollectionOf(Track.class)));
@@ -92,8 +93,8 @@ public class AvailableMusicESLTest {
 
     @Test
     public void testShouldRetryWhenNoSongsRetrieved() throws Exception {
-        esl.setNumerOfAttempts(3);
-        when(mockDatabase.listAllSongs()).thenReturn(NO_SONGS).thenReturn(NO_SONGS).thenReturn(songs);
+        esl.setNumberOfAttempts(3);
+        when(mockSongSearcher.search(SongSearcher.ScopeType.ANY, "")).thenReturn(NO_SONGS).thenReturn(NO_SONGS).thenReturn(songs);
 
         List<Track> tracks = esl.availableMusic();
         assertThat("null or empty track list", tracks, not(emptyCollectionOf(Track.class)));
@@ -105,8 +106,8 @@ public class AvailableMusicESLTest {
     @Test
     public void shouldLimitRetriesWhenNoSongsRetrieved() throws Exception {
         final int maxAttempts = 5;
-        esl.setNumerOfAttempts(maxAttempts);
-        when(mockDatabase.listAllSongs()).thenReturn(NO_SONGS);
+        esl.setNumberOfAttempts(maxAttempts);
+        when(mockSongSearcher.search(SongSearcher.ScopeType.ANY, "")).thenReturn(NO_SONGS);
 
         List<Track> tracks = esl.availableMusic();
         assertThat("expected null or empty track list", tracks, emptyCollectionOf(Track.class));
@@ -137,8 +138,8 @@ public class AvailableMusicESLTest {
         verify(mockConversionService).convert(mpdYouShookMe, Track.class);
     }
 
-    private void verifyMPDInteractions(int expectedTimes) throws MPDConnectionException, MPDResponseException {
-        verify(mockSal, times(expectedTimes)).getDatabase();
+    private void verifyMPDInteractions(int expectedTimes) throws MPDConnectionException {
+        verify(mockSal, times(expectedTimes)).getSongSearcher();
     }
 
 }

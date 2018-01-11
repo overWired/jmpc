@@ -5,7 +5,7 @@ buildscript {
             commonsLang3           : '3.5',
             gradle                 : '3.3',
             guava                  : '21.0',
-            javaMpd                : '5.0.3',
+            javaMpd                : '6.0.0', //'5.0.3',
             springBoot             : '1.5.2.RELEASE',
             springCloudDependencies: 'Camden.RELEASE'
     ]
@@ -40,7 +40,7 @@ plugins { id "io.spring.dependency-management" version "1.0.0.RELEASE" }
 
 
 allprojects {
-    apply plugin: 'eclipse'
+    defaultTasks 'assemble'
 }
 
 subprojects {

@@ -1,8 +1,7 @@
 package org.overwired.jmpc.controller;
 
 import lombok.Setter;
-import org.bff.javampd.exception.MPDConnectionException;
-import org.bff.javampd.exception.MPDDatabaseException;
+import org.bff.javampd.server.MPDConnectionException;
 import org.overwired.jmpc.domain.view.Card;
 import org.overwired.jmpc.service.AvailableMusicService;
 import org.slf4j.Logger;
@@ -26,7 +25,7 @@ public class AvailableMusicController {
     private AvailableMusicService musicService;
 
     @RequestMapping("/cards")
-    public List<Card>  availableMusic() throws MPDDatabaseException, MPDConnectionException {
+    public List<Card>  availableMusic() throws MPDConnectionException {
         LOGGER.trace("retrieving available music from the available music service");
         return musicService.availableMusic();
     }
