@@ -20,5 +20,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-actuator')
 
     compileOnly libraries.springBootDevTools
+
+    runtime libraries.groovy
 }
 

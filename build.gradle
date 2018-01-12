@@ -13,6 +13,7 @@ buildscript {
     ext.libraries = [
             commonsCollections4   : "org.apache.commons:commons-collections4:${versions.commonsCollections4}",
             commmonsLang3         : "org.apache.commons:commons-lang3:${versions.commonsLang3}",
+            groovy                : 'org.codehaus.groovy:groovy-all', /* version managed by Spring Boot */
             guava                 : "com.google.guava:guava:${versions.guava}",
             javaMpd               : "net.thejavashop:javampd:${versions.javaMpd}",
             lombok                : 'org.projectlombok:lombok',
