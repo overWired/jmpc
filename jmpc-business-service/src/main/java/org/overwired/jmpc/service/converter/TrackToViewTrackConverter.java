@@ -3,7 +3,8 @@ package org.overwired.jmpc.service.converter;
 import lombok.Setter;
 import org.overwired.jmpc.domain.app.Track;
 import org.overwired.jmpc.domain.view.ViewTrack;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -14,15 +15,24 @@ import org.springframework.stereotype.Component;
 @Setter
 public class TrackToViewTrackConverter implements Converter<Track, ViewTrack> {
 
-    @Autowired
-    ViewTrack.ViewTrackBuilder viewTrackBuilder;
+    private static final Logger LOGGER = LoggerFactory.getLogger(TrackToViewTrackConverter.class);
 
     @Override
-    public ViewTrack convert(Track track) {
-        return viewTrackBuilder.artist(track.getArtist())
-                               .path(track.getPath())
-                               .title(track.getTitle())
-                               .build();
+    public ViewTrack convert(final Track track) {
+        LOGGER.trace("track: {}", track);
+        Track nonNullTrack = nonNullTrack(track);
+        ViewTrack viewTrack = ViewTrack.builder()
+                                       .artist(nonNullTrack.getArtist())
+                                       .path(nonNullTrack.getPath())
+                                       .title(nonNullTrack.getTitle())
+                                       .build();
+
+        LOGGER.trace("viewTrack: {}", viewTrack);
+        return viewTrack;
+    }
+
+    private Track nonNullTrack(Track track) {
+        return (null == track) ? Track.builder().artist("N / A").title("N / A").build() : track;
     }
 
 }

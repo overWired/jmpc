@@ -1,6 +1,8 @@
 package org.overwired.jmpc.service.converter;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -20,37 +22,37 @@ import org.overwired.jmpc.domain.view.ViewTrack;
 @RunWith(MockitoJUnitRunner.class)
 public class TrackToViewTrackConverterTest {
 
-    public static final String ARTIST = "artist";
-    public static final String PATH = "path";
-    public static final String TITLE = "title";
+    private static final String ARTIST = "artist";
+    private static final String PATH = "path";
+    private static final String TITLE = "title";
+
     TrackToViewTrackConverter converter;
     Track track;
-
-    ViewTrack viewTrack;
-    @Mock
-    ViewTrack.ViewTrackBuilder mockViewTrackBuilder;
 
     @Before
     public void setUp() throws Exception {
         track = Track.builder().artist(ARTIST).path(PATH).title(TITLE).build();
-        viewTrack = ViewTrack.builder().build();
-
-        when(mockViewTrackBuilder.artist(anyString())).thenReturn(mockViewTrackBuilder);
-        when(mockViewTrackBuilder.path(anyString())).thenReturn(mockViewTrackBuilder);
-        when(mockViewTrackBuilder.title(anyString())).thenReturn(mockViewTrackBuilder);
-        when(mockViewTrackBuilder.build()).thenReturn(viewTrack);
 
         converter = new TrackToViewTrackConverter();
-        converter.setViewTrackBuilder(mockViewTrackBuilder);
     }
 
     @Test
-    public void convert() throws Exception {
+    public void shouldProperlyConvertNullToViewTrack() throws Exception {
+        ViewTrack actual = converter.convert(null);
+        assertNotNull("result of conversion was null", actual);
+        assertEquals("N / A", actual.getArtist());
+        assertNull(actual.getPath());
+        assertEquals("N / A", actual.getTitle());
+    }
+
+
+    @Test
+    public void shouldProperlyConvertTrackToViewTrack() throws Exception {
         ViewTrack actual = converter.convert(track);
-        assertEquals(viewTrack, actual);
-        verify(mockViewTrackBuilder, times(1)).artist(ARTIST);
-        verify(mockViewTrackBuilder, times(1)).path(PATH);
-        verify(mockViewTrackBuilder, times(1)).title(TITLE);
+        assertNotNull("result of conversion was null", actual);
+        assertEquals(ARTIST, actual.getArtist());
+        assertEquals(PATH, actual.getPath());
+        assertEquals(TITLE, actual.getTitle());
     }
 
 }

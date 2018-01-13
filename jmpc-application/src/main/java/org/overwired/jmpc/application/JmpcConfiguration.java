@@ -46,10 +46,4 @@ public class JmpcConfiguration {
         return Track.builder();
     }
 
-    @Bean
-    @Scope(PROTOTYPE)
-    public ViewTrack.ViewTrackBuilder viewTrackBuilder() {
-        return ViewTrack.builder();
-    }
-
 }
