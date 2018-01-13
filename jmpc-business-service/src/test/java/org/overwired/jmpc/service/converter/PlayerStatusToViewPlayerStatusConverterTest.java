@@ -2,10 +2,6 @@ package org.overwired.jmpc.service.converter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -26,54 +22,52 @@ import java.util.Collections;
 @RunWith(MockitoJUnitRunner.class)
 public class PlayerStatusToViewPlayerStatusConverterTest {
 
+    private static final String STATUS = "playing";
+
     private PlayerStatusToViewPlayerStatusConverter converter;
-    private ViewPlayerStatus expectedViewPlayerStatus;
+    private Track currentTrack;
+    private ViewTrack currentViewTrack;
+    private Track nextTrack;
+    private ViewTrack nextViewTrack;
+    private PlayerStatus playerStatus = null;
 
     @Mock
     private TrackToViewTrackConverter mockTrackConverter;
-    @Mock
-    private ViewPlayerStatus.ViewPlayerStatusBuilder mockViewPlayerStatusBuilder;
 
     @Before
     public void setup() {
-        converter = new PlayerStatusToViewPlayerStatusConverter(mockViewPlayerStatusBuilder, mockTrackConverter);
+        converter = new PlayerStatusToViewPlayerStatusConverter(mockTrackConverter);
 
-        expectedViewPlayerStatus = ViewPlayerStatus.builder().build();
-
-        when(mockViewPlayerStatusBuilder.currentSong(any(ViewTrack.class))).thenReturn(mockViewPlayerStatusBuilder);
-        when(mockViewPlayerStatusBuilder.status(anyString())).thenReturn(mockViewPlayerStatusBuilder);
-        when(mockViewPlayerStatusBuilder.playlist(anyListOf(ViewTrack.class))).thenReturn(mockViewPlayerStatusBuilder);
-        when(mockViewPlayerStatusBuilder.build()).thenReturn(expectedViewPlayerStatus);
+        currentTrack = Track.builder().title("current").build();
+        nextTrack = Track.builder().title("next").build();
+        currentViewTrack = ViewTrack.builder().title("next").build();
+        nextViewTrack = ViewTrack.builder().title("vNext").build();
     }
 
     @Test
     public void shouldConvertNullMusicPlayerToEmptyMusicPlayerView() throws Exception {
-        ViewPlayerStatus actualViewPlayerStatus = converter.convert(null);
-        assertNotNull("result should not be null", actualViewPlayerStatus);
+        assertNotNull("result should not be null", converter.convert(playerStatus));
     }
 
     @Test
     public void shouldConvertValidMusicPlayerToEquivalentMusicPlayerView() {
-        Track currentTrack = Track.builder().title("current").build();
-        ViewTrack currentViewTrack = ViewTrack.builder().title("current").build();
-
-        Track nextTrack = Track.builder().title("next").build();
-        ViewTrack nextViewTrack = ViewTrack.builder().title("next").build();
-
-        PlayerStatus playerStatus = PlayerStatus.builder()
-                                                .currentSong(currentTrack)
-                                                .status("status")
-                                                .playlistItem(nextTrack).build();
-
+        playerStatus = setUpPlayerStatus();
         when(mockTrackConverter.convert(currentTrack)).thenReturn(currentViewTrack);
         when(mockTrackConverter.convert(nextTrack)).thenReturn(nextViewTrack);
 
-        ViewPlayerStatus actualViewPlayerStatus = converter.convert(playerStatus);
-        assertEquals(expectedViewPlayerStatus, actualViewPlayerStatus);
+        ViewPlayerStatus viewPlayerStatus = converter.convert(playerStatus);
+        assertNotNull("result should not be null", viewPlayerStatus);
+        assertEquals(currentViewTrack, viewPlayerStatus.getCurrentSong());
+        assertEquals(STATUS, viewPlayerStatus.getStatus());
+        assertEquals(Collections.singletonList(nextViewTrack), viewPlayerStatus.getPlaylist());
+    }
 
-        verify(mockViewPlayerStatusBuilder).currentSong(currentViewTrack);
-        verify(mockViewPlayerStatusBuilder).status("status");
-        verify(mockViewPlayerStatusBuilder).playlist(Collections.singletonList(nextViewTrack));
+    private PlayerStatus setUpPlayerStatus() {
+        return PlayerStatus.builder()
+                           .currentSong(currentTrack)
+                           .status(STATUS)
+                           .playlist(Collections.singletonList(nextTrack))
+                           .build();
     }
 
 }

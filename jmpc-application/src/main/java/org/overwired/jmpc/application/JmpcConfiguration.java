@@ -25,6 +25,7 @@ public class JmpcConfiguration {
     private static final String PROTOTYPE = "prototype";
 
     @Bean
+    @Scope(PROTOTYPE)
     public MPD.Builder mpdBuilder(@Value("${mpd.host}") String host,
                                   @Value("${mpd.port}") int port,
                                   @Value("${mpd.password:}") String password) throws UnknownHostException {
@@ -37,12 +38,6 @@ public class JmpcConfiguration {
     @Scope(PROTOTYPE)
     public PlayerStatus.PlayerStatusBuilder musicPlayerBuilder() {
         return PlayerStatus.builder();
-    }
-
-    @Bean
-    @Scope(PROTOTYPE)
-    public ViewPlayerStatus.ViewPlayerStatusBuilder musicPlayerViewBuilder() {
-        return ViewPlayerStatus.builder();
     }
 
     @Bean
