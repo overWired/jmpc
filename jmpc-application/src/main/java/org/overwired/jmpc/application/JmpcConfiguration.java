@@ -36,12 +36,6 @@ public class JmpcConfiguration {
 
     @Bean
     @Scope(PROTOTYPE)
-    public PlayerStatus.PlayerStatusBuilder musicPlayerBuilder() {
-        return PlayerStatus.builder();
-    }
-
-    @Bean
-    @Scope(PROTOTYPE)
     public Track.TrackBuilder trackBuilder() {
         return Track.builder();
     }

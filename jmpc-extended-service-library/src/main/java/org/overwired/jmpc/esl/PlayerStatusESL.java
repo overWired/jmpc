@@ -25,9 +25,6 @@ public class PlayerStatusESL {
 
     private final ConversionService conversionService;
     private final MediaPlayerDaemonSAL sal;
-    @Autowired
-    @Setter
-    private PlayerStatus.PlayerStatusBuilder playerStatusBuilder;
 
     @Autowired
     public PlayerStatusESL(ConversionService conversionService, MediaPlayerDaemonSAL sal) {
@@ -38,10 +35,11 @@ public class PlayerStatusESL {
     public PlayerStatus playerStatus() {
         Player player = sal.getPlayer();
 
-        return playerStatusBuilder.currentSong(conversionService.convert(player.getCurrentSong(), Track.class))
-                                  .status(conversionService.convert(player.getStatus(), String.class))
-                                  .playlist(convertPlaylist(sal.getPlaylist()))
-                                  .build();
+        return PlayerStatus.builder()
+                           .currentSong(conversionService.convert(player.getCurrentSong(), Track.class))
+                           .status(conversionService.convert(player.getStatus(), String.class))
+                           .playlist(convertPlaylist(sal.getPlaylist()))
+                           .build();
     }
 
     private List<Track> convertPlaylist(final Playlist playlist) {
