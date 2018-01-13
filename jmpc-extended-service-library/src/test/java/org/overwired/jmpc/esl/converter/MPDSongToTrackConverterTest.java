@@ -19,6 +19,7 @@ public class MPDSongToTrackConverterTest {
 
     private static final String ALBUM = "Album";
     private static final String ARTIST = "Artist";
+    private static final String FILE_NAME = "file_name";
     private static final String TITLE = "Title";
     private static final int TRACK = 1;
 
@@ -46,6 +47,7 @@ public class MPDSongToTrackConverterTest {
         expectedTrack = Track.builder().build();
         when(mockTrackBuilder.album(ALBUM)).thenReturn(mockTrackBuilder);
         when(mockTrackBuilder.artist(ARTIST)).thenReturn(mockTrackBuilder);
+        when(mockTrackBuilder.path(FILE_NAME)).thenReturn(mockTrackBuilder);
         when(mockTrackBuilder.title(TITLE)).thenReturn(mockTrackBuilder);
         when(mockTrackBuilder.trackNumber(TRACK)).thenReturn(mockTrackBuilder);
         when(mockTrackBuilder.build()).thenReturn(expectedTrack);
@@ -58,7 +60,7 @@ public class MPDSongToTrackConverterTest {
     }
 
     private void setupMpdSong() {
-        mpdSong = new MPDSong("file_name", TITLE);
+        mpdSong = new MPDSong(FILE_NAME, TITLE);
         mpdSong.setAlbumName(ALBUM);
         mpdSong.setArtistName(ARTIST);
         mpdSong.setTrack(TRACK);

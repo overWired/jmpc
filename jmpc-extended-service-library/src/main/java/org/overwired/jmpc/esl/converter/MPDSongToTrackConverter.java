@@ -28,8 +28,8 @@ public class MPDSongToTrackConverter implements Converter<MPDSong, Track> {
                 // MPDSong's own toString method embeds newlines.  Screw that.
                 LOGGER.trace("converting MPDSong to Track: {}", ReflectionToStringBuilder.toString(mpdSong));
             }
-            trackBuilder.artist(mpdSong.getArtistName())
-                        .album(mpdSong.getAlbumName())
+            trackBuilder.album(mpdSong.getAlbumName())
+                        .artist(mpdSong.getArtistName())
                         .path(mpdSong.getFile())
                         .title(mpdSong.getTitle())
                         .trackNumber(mpdSong.getTrack());
