@@ -2,19 +2,14 @@ package org.overwired.jmpc.esl;
 
 import static org.bff.javampd.player.Player.Status.STATUS_PAUSED;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.bff.javampd.player.Player;
 import org.bff.javampd.playlist.Playlist;
-import org.bff.javampd.server.MPDConnectionException;
 import org.bff.javampd.song.MPDSong;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -79,7 +74,8 @@ public class PlayerStatusESLTest {
 
         when(mockPlayerStatusBuilder.build()).thenReturn(expectedStatus);
 
-        esl = new PlayerStatusESL(mockPlayerStatusBuilder, mockConversionService, mockSal);
+        esl = new PlayerStatusESL(mockConversionService, mockSal);
+        esl.setPlayerStatusBuilder(mockPlayerStatusBuilder);
     }
 
     @Test
