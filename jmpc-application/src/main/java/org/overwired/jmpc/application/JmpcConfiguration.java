@@ -34,10 +34,4 @@ public class JmpcConfiguration {
         return new MPD.Builder().server(host).port(port).password(StringUtils.trimToNull(password));
     }
 
-    @Bean
-    @Scope(PROTOTYPE)
-    public Track.TrackBuilder trackBuilder() {
-        return Track.builder();
-    }
-
 }

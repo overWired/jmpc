@@ -19,24 +19,28 @@ public class MPDSongToTrackConverter implements Converter<MPDSong, Track> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MPDSongToTrackConverter.class);
 
-    @Autowired
-    private Track.TrackBuilder trackBuilder;
+    public Track convert(final MPDSong mpdSong) {
+        MPDSong nonNullMPDSong = nonNullMPDSong(mpdSong);
+        return Track.builder()
+                    .album(nonNullMPDSong.getAlbumName())
+                    .artist(nonNullMPDSong.getArtistName())
+                    .path(nonNullMPDSong.getFile())
+                    .title(nonNullMPDSong.getTitle())
+                    .trackNumber(nonNullMPDSong.getTrack())
+                    .build();
+    }
 
-    public Track convert(MPDSong mpdSong) {
-        if (null != mpdSong) {
-            if (LOGGER.isTraceEnabled()) {
-                // MPDSong's own toString method embeds newlines.  Screw that.
-                LOGGER.trace("converting MPDSong to Track: {}", ReflectionToStringBuilder.toString(mpdSong));
-            }
-            trackBuilder.album(mpdSong.getAlbumName())
-                        .artist(mpdSong.getArtistName())
-                        .path(mpdSong.getFile())
-                        .title(mpdSong.getTitle())
-                        .trackNumber(mpdSong.getTrack());
-        } else {
-            LOGGER.trace("source is null, returning an unpopulated track");
+    private MPDSong nonNullMPDSong(final MPDSong mpdSong) {
+        MPDSong nonNullMPDSong = mpdSong;
+        if (null == mpdSong) {
+            LOGGER.debug("mpdSong is null, returning an unpopulated track");
+            nonNullMPDSong = new MPDSong("N / A", "N / A");
         }
-        return trackBuilder.build();
+        if (LOGGER.isTraceEnabled()) {
+            // MPDSong's own toString method embeds newlines.  Screw that.
+            LOGGER.trace("converting MPDSong to Track: {}", ReflectionToStringBuilder.toString(mpdSong));
+        }
+        return nonNullMPDSong;
     }
 
 }

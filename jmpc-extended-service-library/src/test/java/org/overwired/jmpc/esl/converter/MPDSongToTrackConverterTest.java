@@ -1,7 +1,6 @@
 package org.overwired.jmpc.esl.converter;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.bff.javampd.song.MPDSong;
@@ -25,38 +24,27 @@ public class MPDSongToTrackConverterTest {
 
     private MPDSongToTrackConverter converter;
     private MPDSong mpdSong;
-    private Track expectedTrack;
-    private Track.TrackBuilder mockTrackBuilder;
 
     @Before
     public void setUp() throws Exception {
-        mockTrackBuilder = mock(Track.TrackBuilder.class);
-
         setupMpdSong();
         converter = new MPDSongToTrackConverter();
-        converter.setTrackBuilder(mockTrackBuilder);
     }
 
     @Test
     public void shouldReturnNullWhenGivenNull() throws Exception {
-        assertNull("null input should cause null output", converter.convert(null));
+        assertNotNull("null input should return placeholder track", converter.convert(null));
     }
 
     @Test
     public void shouldConvertMpdSongIntoTrack() throws Exception {
-        expectedTrack = Track.builder().build();
-        when(mockTrackBuilder.album(ALBUM)).thenReturn(mockTrackBuilder);
-        when(mockTrackBuilder.artist(ARTIST)).thenReturn(mockTrackBuilder);
-        when(mockTrackBuilder.path(FILE_NAME)).thenReturn(mockTrackBuilder);
-        when(mockTrackBuilder.title(TITLE)).thenReturn(mockTrackBuilder);
-        when(mockTrackBuilder.trackNumber(TRACK)).thenReturn(mockTrackBuilder);
-        when(mockTrackBuilder.build()).thenReturn(expectedTrack);
-
-        assertEquals(expectedTrack, converter.convert(mpdSong));
-        verify(mockTrackBuilder).album(ALBUM);
-        verify(mockTrackBuilder).artist(ARTIST);
-        verify(mockTrackBuilder).title(TITLE);
-        verify(mockTrackBuilder).trackNumber(TRACK);
+        Track track = converter.convert(mpdSong);
+        assertNotNull("converted track is null", track);
+        assertEquals(ALBUM, track.getAlbum());
+        assertEquals(ARTIST, track.getArtist());
+        assertEquals(FILE_NAME, track.getPath());
+        assertEquals(TITLE, track.getTitle());
+        assertEquals(TRACK, track.getTrackNumber());
     }
 
     private void setupMpdSong() {
