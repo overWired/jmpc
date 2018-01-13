@@ -9,32 +9,32 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.overwired.jmpc.domain.view.MusicPlayerView;
+import org.overwired.jmpc.domain.view.ViewPlayerStatus;
 import org.overwired.jmpc.service.MusicPlayerService;
 
 /**
- * Tests the MusicPlayerController class.
+ * Tests the PlayerController class.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class MusicPlayerControllerTest {
+public class PlayerControllerTest {
 
-    private MusicPlayerController playerController;
+    private PlayerController playerController;
     @Mock
     private MusicPlayerService mockMusicPlayerService;
-    private MusicPlayerView musicPlayerView;
+    private ViewPlayerStatus viewPlayerStatus;
 
     @Before
     public void setup() throws Exception {
-        playerController = new MusicPlayerController();
+        playerController = new PlayerController();
         playerController.setMusicPlayerService(mockMusicPlayerService);
 
-        musicPlayerView = MusicPlayerView.builder().status("status").currentSong("currentSong").build();
-        when(mockMusicPlayerService.player()).thenReturn(musicPlayerView);
+        viewPlayerStatus = ViewPlayerStatus.builder().status("status").currentSong("currentSong").build();
+        when(mockMusicPlayerService.status()).thenReturn(viewPlayerStatus);
     }
 
     @Test
     public void shouldUsePlayerServiceToGetPlayer() throws Exception {
-        assertEquals("wrong musicPlayerView object returned", musicPlayerView, playerController.player());
+        assertEquals("wrong viewPlayerStatus object returned", viewPlayerStatus, playerController.player());
     }
 
 }

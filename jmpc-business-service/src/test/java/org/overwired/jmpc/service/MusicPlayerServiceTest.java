@@ -1,6 +1,7 @@
 package org.overwired.jmpc.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -8,43 +9,41 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.overwired.jmpc.domain.app.MusicPlayer;
-import org.overwired.jmpc.domain.view.MusicPlayerView;
-import org.overwired.jmpc.esl.MusicPlayerESL;
+import org.overwired.jmpc.domain.app.PlayerStatus;
+import org.overwired.jmpc.domain.view.ViewPlayerStatus;
+import org.overwired.jmpc.esl.PlayerStatusESL;
 import org.springframework.core.convert.ConversionService;
 
 /**
- * Tests the PlayerService class.
+ * Tests the MusicPlayerService class.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class MusicPlayerServiceTest {
 
-    private final String CURRENT_SONG = "currentSong";
-    private final String STATUS = "status";
+    private MusicPlayerService musicPlayerService;
+    private PlayerStatus playerStatus;
+    private ViewPlayerStatus viewPlayerStatus;
 
     @Mock
     private ConversionService mockConversionService;
-    private MusicPlayer musicPlayer;
     @Mock
-    private MusicPlayerESL mockMusicPlayerESL;
-    private MusicPlayerService musicPlayerService;
-    private MusicPlayerView musicPlayerView;
+    private PlayerStatusESL mockPlayerStatusESL;
 
     @Before
     public void setup() throws Exception {
-        musicPlayer = MusicPlayer.builder().currentSong(CURRENT_SONG).status(STATUS).build();
-        musicPlayerView = MusicPlayerView.builder().currentSong("currentSong").status(STATUS).build();
-        musicPlayerService = new MusicPlayerService()
-                .setConversionService(mockConversionService)
-                .setMusicPlayerESL(mockMusicPlayerESL);
+        musicPlayerService = new MusicPlayerService(mockConversionService, mockPlayerStatusESL);
 
-        when(mockMusicPlayerESL.musicPlayer()).thenReturn(musicPlayer);
-        when(mockConversionService.convert(musicPlayer, MusicPlayerView.class)).thenReturn(musicPlayerView);
+        playerStatus = PlayerStatus.builder().build();
+        viewPlayerStatus = ViewPlayerStatus.builder().build();
+
+        when(mockPlayerStatusESL.playerStatus()).thenReturn(playerStatus);
+        when(mockConversionService.convert(playerStatus, ViewPlayerStatus.class)).thenReturn(viewPlayerStatus);
     }
 
     @Test
     public void player() throws Exception {
-        assertEquals("wrong MusicPlayerView object returned", musicPlayerView, musicPlayerService.player());
+        assertEquals("wrong ViewPlayerStatus object returned", viewPlayerStatus, musicPlayerService.status());
+        verify(mockConversionService).convert(playerStatus, ViewPlayerStatus.class);
     }
 
 }

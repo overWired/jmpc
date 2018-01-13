@@ -22,14 +22,17 @@ public class MPDSongToTrackConverter implements Converter<MPDSong, Track> {
     @Autowired
     private Track.TrackBuilder trackBuilder;
 
-    public Track convert(MPDSong source) {
-        if (null != source) {
-            // MPDSong's own toString method embeds newlines.  Screw that.
-            LOGGER.trace("converting MPDSong to Track: {}", ReflectionToStringBuilder.toString(source));
-            trackBuilder.artist(source.getArtistName())
-                    .album(source.getAlbumName())
-                    .title(source.getTitle())
-                    .trackNumber(source.getTrack());
+    public Track convert(MPDSong mpdSong) {
+        if (null != mpdSong) {
+            if (LOGGER.isTraceEnabled()) {
+                // MPDSong's own toString method embeds newlines.  Screw that.
+                LOGGER.trace("converting MPDSong to Track: {}", ReflectionToStringBuilder.toString(mpdSong));
+            }
+            trackBuilder.artist(mpdSong.getArtistName())
+                        .album(mpdSong.getAlbumName())
+                        .path(mpdSong.getFile())
+                        .title(mpdSong.getTitle())
+                        .trackNumber(mpdSong.getTrack());
         } else {
             LOGGER.trace("source is null, returning an unpopulated track");
         }

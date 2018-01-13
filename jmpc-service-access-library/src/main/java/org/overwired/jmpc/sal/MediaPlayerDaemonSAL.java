@@ -2,10 +2,9 @@ package org.overwired.jmpc.sal;
 
 import lombok.Setter;
 import org.bff.javampd.admin.Admin;
-import org.bff.javampd.database.MusicDatabase;
-import org.bff.javampd.server.MPD;
 import org.bff.javampd.player.Player;
 import org.bff.javampd.playlist.Playlist;
+import org.bff.javampd.server.MPD;
 import org.bff.javampd.server.MPDConnectionException;
 import org.bff.javampd.song.SongSearcher;
 import org.slf4j.Logger;
@@ -35,15 +34,19 @@ public class MediaPlayerDaemonSAL {
         return _mpd;
     }
 
-    public Admin getAdmin() throws MPDConnectionException {
+    public Admin getAdmin() {
         return mpd().getAdmin();
     }
 
-    public Player getPlayer() throws MPDConnectionException {
-        return mpd().getPlayer();
+    public Player getPlayer() {
+        Player player = mpd().getPlayer();
+        if (null == player) {
+            throw new NullPointerException("cannot access a null Player object");
+        }
+        return player;
     }
 
-    public Playlist getPlaylist() throws MPDConnectionException {
+    public Playlist getPlaylist() {
         return mpd().getPlaylist();
     }
 

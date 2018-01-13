@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.overwired.jmpc.domain.view.Card;
+import org.overwired.jmpc.domain.view.ViewCard;
 import org.overwired.jmpc.service.AvailableMusicService;
 
 import java.util.Collections;
@@ -20,13 +20,13 @@ import java.util.List;
 @RunWith(MockitoJUnitRunner.class)
 public class AvailableMusicControllerTest {
 
-    private List<Card> cards;
+    private List<ViewCard> viewCards;
     private AvailableMusicController controller;
     private AvailableMusicService mockAvailableMusicService;
 
     @Before
     public void setUp() throws Exception {
-        cards = Collections.emptyList();
+        viewCards = Collections.emptyList();
         mockAvailableMusicService = mock(AvailableMusicService.class);
         controller = new AvailableMusicController();
         controller.setMusicService(mockAvailableMusicService);
@@ -34,8 +34,8 @@ public class AvailableMusicControllerTest {
 
     @Test
     public void getCards() throws Exception {
-        when(mockAvailableMusicService.availableMusic()).thenReturn(cards);
-        assertEquals(cards, controller.availableMusic());
+        when(mockAvailableMusicService.availableMusic()).thenReturn(viewCards);
+        assertEquals(viewCards, controller.availableMusic());
     }
 
 }

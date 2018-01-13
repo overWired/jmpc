@@ -7,13 +7,7 @@ app.controller('CardListController', function($scope, $http) {
 });
 
 app.controller('MusicPlayerController', function($scope, $http) {
-	$http.get("musicPlayer").then(function(response) {
+	$http.get("player/status").then(function(response) {
 		$scope.player = response.data;
-	});
-});
-
-app.controller("PlaylistController", function($scope, $http) {
-	$http.get("data/playlist.json").then(function(response) {
-		$scope.playlist = response.data;
 	});
 });

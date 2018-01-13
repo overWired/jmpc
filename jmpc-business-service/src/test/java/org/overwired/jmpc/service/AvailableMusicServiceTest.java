@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.overwired.jmpc.domain.app.Track;
-import org.overwired.jmpc.domain.view.Card;
+import org.overwired.jmpc.domain.view.ViewCard;
 import org.overwired.jmpc.esl.AvailableMusicESL;
 import org.overwired.jmpc.test.MapToTrackConverter;
 import org.springframework.core.convert.converter.Converter;
@@ -55,19 +55,19 @@ public class AvailableMusicServiceTest {
     public void shouldReturnEachCardWithMusicFromTheSameArtist() throws Exception {
         when(mockEsl.availableMusic()).thenReturn(tracks);
 
-        List<Card> cards = service.availableMusic();
-        assertThat("returned list of cards was null or empty", cards, not(emptyCollectionOf(Card.class)));
-        assertEquals("wrong number of cards returned", 2, cards.size());
+        List<ViewCard> viewCards = service.availableMusic();
+        assertThat("returned list of viewCards was null or empty", viewCards, not(emptyCollectionOf(ViewCard.class)));
+        assertEquals("wrong number of viewCards returned", 2, viewCards.size());
     }
 
     @Test
     public void shouldReturnOneSpecialCardWhenNoTracksAreAvailable() throws Exception {
         when(mockEsl.availableMusic()).thenReturn(Collections.emptyList());
 
-        List<Card> cards = service.availableMusic();
-        assertThat("returned list of cards was null or empty", cards, not(emptyCollectionOf(Card.class)));
-        assertEquals("expected one special 'no music found' card", 1, cards.size());
-        assertEquals(AvailableMusicService.NO_MUSIC_FOUND, cards.get(0).getArtist());
+        List<ViewCard> viewCards = service.availableMusic();
+        assertThat("returned list of viewCards was null or empty", viewCards, not(emptyCollectionOf(ViewCard.class)));
+        assertEquals("expected one special 'no music found' card", 1, viewCards.size());
+        assertEquals(AvailableMusicService.NO_MUSIC_FOUND, viewCards.get(0).getArtist());
     }
 
 }

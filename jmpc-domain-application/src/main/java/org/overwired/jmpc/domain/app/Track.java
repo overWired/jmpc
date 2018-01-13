@@ -13,6 +13,7 @@ public class Track implements Comparable<Track> {
     String album;
     String artist;
     int id;
+    String path;
     String title;
     int trackNumber;
 

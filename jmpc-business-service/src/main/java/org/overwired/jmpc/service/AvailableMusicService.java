@@ -5,7 +5,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bff.javampd.server.MPDConnectionException;
 import org.overwired.jmpc.domain.app.Track;
-import org.overwired.jmpc.domain.view.Card;
+import org.overwired.jmpc.domain.view.ViewCard;
 import org.overwired.jmpc.esl.AvailableMusicESL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,28 +25,29 @@ public class AvailableMusicService {
 
     public static final String NO_MUSIC_FOUND = "No Music Found";
     private static final Logger LOGGER = LoggerFactory.getLogger(AvailableMusicService.class);
+
     @Autowired
     private AvailableMusicESL esl;
 
-    public List<Card> availableMusic() throws MPDConnectionException {
+    public List<ViewCard> availableMusic() throws MPDConnectionException {
         List<Track> tracks = esl.availableMusic();
-        List<Card> cardList = createCards(tracks);
-        logCardsToBeReturned(cardList);
-        return cardList;
+        List<ViewCard> viewCardList = createCards(tracks);
+        logCardsToBeReturned(viewCardList);
+        return viewCardList;
     }
 
-    private List<Card> createCards(List<Track> tracks) {
-        List<Card> cardList;
+    private List<ViewCard> createCards(List<Track> tracks) {
+        List<ViewCard> viewCardList;
         if (CollectionUtils.isEmpty(tracks)) {
-            cardList = Collections.singletonList(Card.builder().artist(NO_MUSIC_FOUND).build());
+            viewCardList = Collections.singletonList(ViewCard.builder().artist(NO_MUSIC_FOUND).build());
         } else {
-            cardList = new ArrayList<>(estimateNumberOfCards(tracks));
+            viewCardList = new ArrayList<>(estimateNumberOfCards(tracks));
             Collections.sort(tracks);
             int trackIndex = 0;
             int numTracks = tracks.size();
             while (trackIndex < numTracks) {
                 Track track = tracks.get(trackIndex);
-                Card.CardBuilder builder = Card.builder()
+                ViewCard.ViewCardBuilder builder = ViewCard.builder()
                         .artist(track.getArtist())
                         .id_a(zeroPaddedCardId(trackIndex))
                         .title_a(track.getTitle());
@@ -58,19 +59,19 @@ public class AvailableMusicService {
                         builder.id_b(zeroPaddedCardId(trackIndex++)).title_b(trackTwo.getTitle());
                     }
                 }
-                cardList.add(builder.build());
+                viewCardList.add(builder.build());
             }
         }
-        return cardList;
+        return viewCardList;
     }
 
     private int estimateNumberOfCards(List<Track> tracks) {
         return Math.round(tracks.size() / 2);
     }
 
-    private void logCardsToBeReturned(List<Card> cardList) {
-        LOGGER.debug("returning {} music cards", cardList.size());
-        LOGGER.trace("details of music cards: {}", cardList);
+    private void logCardsToBeReturned(List<ViewCard> viewCardList) {
+        LOGGER.debug("returning {} music cards", viewCardList.size());
+        LOGGER.trace("details of music cards: {}", viewCardList);
     }
 
     private String zeroPaddedCardId(int trackIndex) {

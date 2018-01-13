@@ -2,9 +2,10 @@ package org.overwired.jmpc.application;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bff.javampd.server.MPD;
-import org.overwired.jmpc.domain.app.MusicPlayer;
+import org.overwired.jmpc.domain.app.PlayerStatus;
 import org.overwired.jmpc.domain.app.Track;
-import org.overwired.jmpc.domain.view.MusicPlayerView;
+import org.overwired.jmpc.domain.view.ViewPlayerStatus;
+import org.overwired.jmpc.domain.view.ViewTrack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,20 +35,26 @@ public class JmpcConfiguration {
 
     @Bean
     @Scope(PROTOTYPE)
-    public MusicPlayer.MusicPlayerBuilder musicPlayerBuilder() {
-        return MusicPlayer.builder();
+    public PlayerStatus.PlayerStatusBuilder musicPlayerBuilder() {
+        return PlayerStatus.builder();
     }
 
     @Bean
     @Scope(PROTOTYPE)
-    public MusicPlayerView.MusicPlayerViewBuilder musicPlayerViewBuilder() {
-        return MusicPlayerView.builder();
+    public ViewPlayerStatus.ViewPlayerStatusBuilder musicPlayerViewBuilder() {
+        return ViewPlayerStatus.builder();
     }
 
     @Bean
     @Scope(PROTOTYPE)
     public Track.TrackBuilder trackBuilder() {
         return Track.builder();
+    }
+
+    @Bean
+    @Scope(PROTOTYPE)
+    public ViewTrack.ViewTrackBuilder viewTrackBuilder() {
+        return ViewTrack.builder();
     }
 
 }

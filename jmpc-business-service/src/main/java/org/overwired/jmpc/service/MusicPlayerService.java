@@ -2,9 +2,8 @@ package org.overwired.jmpc.service;
 
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.overwired.jmpc.domain.app.MusicPlayer;
-import org.overwired.jmpc.domain.view.MusicPlayerView;
-import org.overwired.jmpc.esl.MusicPlayerESL;
+import org.overwired.jmpc.domain.view.ViewPlayerStatus;
+import org.overwired.jmpc.esl.PlayerStatusESL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,27 +11,22 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 /**
- * A business service providing access to the music player.
+ * A business service providing access to the music status.
  */
-@Accessors(chain = true)
 @Service
-@Setter
 public class MusicPlayerService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MusicPlayerService.class);
+    private final ConversionService conversionService;
+    private final PlayerStatusESL playerStatusESL;
 
     @Autowired
-    private ConversionService conversionService;
-    @Autowired
-    private MusicPlayerESL musicPlayerESL;
-
-    public MusicPlayerView player() {
-        LOGGER.trace("retrieving a MusicPlayerView object");
-        return conversionService.convert(applicationMusicPlayer(), MusicPlayerView.class);
+    public MusicPlayerService(ConversionService conversionService, PlayerStatusESL playerStatusESL) {
+        this.conversionService = conversionService;
+        this.playerStatusESL = playerStatusESL;
     }
 
-    private MusicPlayer applicationMusicPlayer() {
-        return musicPlayerESL.musicPlayer();
+    public ViewPlayerStatus status() {
+        return conversionService.convert(playerStatusESL.playerStatus(), ViewPlayerStatus.class);
     }
 
 }
