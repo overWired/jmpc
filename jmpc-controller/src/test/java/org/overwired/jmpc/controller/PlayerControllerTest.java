@@ -28,7 +28,7 @@ public class PlayerControllerTest {
         playerController = new PlayerController();
         playerController.setMusicPlayerService(mockMusicPlayerService);
 
-        viewPlayerStatus = ViewPlayerStatus.builder().status("status").currentSong("currentSong").build();
+        viewPlayerStatus = ViewPlayerStatus.builder().build();
         when(mockMusicPlayerService.status()).thenReturn(viewPlayerStatus);
     }
 
