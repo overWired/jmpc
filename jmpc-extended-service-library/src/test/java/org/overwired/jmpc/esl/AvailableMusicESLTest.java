@@ -73,11 +73,9 @@ public class AvailableMusicESLTest {
         when(mockConversionService.convert(mpdPhotograph, Track.class)).thenReturn(trackPhotograph);
         when(mockConversionService.convert(mpdYouShookMe, Track.class)).thenReturn(trackYouShookMe);
 
-        esl = new AvailableMusicESL();
-        esl.setConversionService(mockConversionService);
-        esl.setSal(mockSal);
-
         when(mockSal.getSongSearcher()).thenReturn(mockSongSearcher);
+
+        esl = new AvailableMusicESL(mockConversionService, mockSal);
     }
 
     @Test

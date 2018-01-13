@@ -22,16 +22,20 @@ import java.util.List;
  * The Extended Service Library for Available Music.
  */
 @Repository
-@Setter
 public class AvailableMusicESL {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AvailableMusicESL.class);
 
-    @Autowired
-    private ConversionService conversionService;
+    private final ConversionService conversionService;
+    @Setter
     private int numberOfAttempts = 2;
+    private final MediaPlayerDaemonSAL sal;
+
     @Autowired
-    private MediaPlayerDaemonSAL sal;
+    public AvailableMusicESL(ConversionService conversionService, MediaPlayerDaemonSAL sal) {
+        this.conversionService = conversionService;
+        this.sal = sal;
+    }
 
     public List<Track> availableMusic() throws MPDConnectionException {
         LOGGER.trace("retrieving songs from MPD database");
