@@ -1,5 +1,7 @@
 package org.overwired.jmpc.esl;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.bff.javampd.player.Player.Status.STATUS_PAUSED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -18,6 +20,7 @@ import org.overwired.jmpc.domain.app.Track;
 import org.overwired.jmpc.sal.MediaPlayerDaemonSAL;
 import org.springframework.core.convert.ConversionService;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -59,7 +62,7 @@ public class PlayerStatusESLTest {
     }
 
     private void setUpMockPlaylist() {
-        when(mockPlaylist.getSongList()).thenReturn(Collections.singletonList(mockNextSong));
+        when(mockPlaylist.getSongList()).thenReturn(asList(mockCurrentSong, mockNextSong));
     }
 
     private void setUpMockConversionService() {
@@ -88,7 +91,18 @@ public class PlayerStatusESLTest {
         assertNotNull("PlayerStatus is null", playerStatus);
         assertEquals("wrong current track", currentTrack, playerStatus.getCurrentSong());
         assertEquals("wrong status", STATUS, playerStatus.getStatus());
-        assertEquals("wrong playlist", Collections.singletonList(nextTrack), playerStatus.getPlaylist());
+        assertEquals("wrong playlist", asList(currentTrack, nextTrack), playerStatus.getPlaylist());
+    }
+
+    @Test
+    public void shouldSkipCurrentSongInPlaylist() throws Exception {
+        when(mockPlaylist.getCurrentSong()).thenReturn(mockCurrentSong);
+
+        PlayerStatus playerStatus = esl.playerStatus();
+        assertNotNull("PlayerStatus is null", playerStatus);
+        assertEquals("wrong current track", currentTrack, playerStatus.getCurrentSong());
+        assertEquals("wrong status", STATUS, playerStatus.getStatus());
+        assertEquals("wrong playlist", singletonList(nextTrack), playerStatus.getPlaylist());
     }
 
 }

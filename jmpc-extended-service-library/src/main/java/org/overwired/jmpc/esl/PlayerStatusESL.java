@@ -1,6 +1,5 @@
 package org.overwired.jmpc.esl;
 
-import lombok.Setter;
 import org.bff.javampd.player.Player;
 import org.bff.javampd.playlist.Playlist;
 import org.overwired.jmpc.domain.app.PlayerStatus;
@@ -43,9 +42,20 @@ public class PlayerStatusESL {
     }
 
     private List<Track> convertPlaylist(final Playlist playlist) {
-        return playlist.getSongList().stream()
+        return playlist.getSongList()
+                       .stream()
+                       .skip(theCurrentSongOf(playlist))
                        .map(song -> conversionService.convert(song, Track.class))
                        .collect(Collectors.toList());
+    }
+
+    /**
+     * Determine if the first song in the playlist should be skipped.
+     * @param playlist the playilst to interrogate
+     * @return 1 if there is a currentSong, indicating to skip the first song in the songlist; 0 to keep all songs.
+     */
+    private int theCurrentSongOf(Playlist playlist) {
+        return (null == playlist.getCurrentSong()) ? 0 : 1;
     }
 
 }
