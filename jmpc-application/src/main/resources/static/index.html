@@ -12,7 +12,7 @@
   <header id="header">
     <section id="player" data-ng-controller="MusicPlayerController">
       <!-- want to reuse the playlist-item.html include here, but can't figure out how to set song=player.currentSong -->
-      <section id="status">{{player.currentSong.artist}} - {{player.currentSong.title}} «{{player.status}}»</section>
+      <section id="status"><em>{{player.currentSong.title}}</em> -- {{player.currentSong.artist}} «{{player.status}}»</section>
       <div id="play_queue">
         <ul>
           <li data-ng-repeat="song in player.playlist" data-ng-include="'playlist-item.html'"></li>
