@@ -15,6 +15,7 @@ import java.util.List;
 /**
  * Provide access to Jukebox cards.
  */
+@RequestMapping("/music")
 @RestController
 @Setter
 public class AvailableMusicController {
