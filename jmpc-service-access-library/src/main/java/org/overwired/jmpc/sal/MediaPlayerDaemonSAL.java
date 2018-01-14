@@ -1,9 +1,12 @@
 package org.overwired.jmpc.sal;
 
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bff.javampd.admin.Admin;
+import org.bff.javampd.monitor.StandAloneMonitor;
 import org.bff.javampd.player.Player;
 import org.bff.javampd.playlist.Playlist;
+import org.bff.javampd.playlist.PlaylistBasicChangeListener;
 import org.bff.javampd.server.MPD;
 import org.bff.javampd.server.MPDConnectionException;
 import org.bff.javampd.song.SongSearcher;
@@ -12,17 +15,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * A Service Access Library for MusicPlayerDaemon.
  */
 @Component
-public class MediaPlayerDaemonSAL {
+@RequiredArgsConstructor
+public class MediaPlayerDaemonSAL implements PlayerFactory, PlaylistFactory, StandAloneMonitorFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MediaPlayerDaemonSAL.class);
 
-    @Autowired
-    @Setter
-    private MPD.Builder builder;
+    private final MPD.Builder builder;
     private int connectCount = 0;
     private MPD _mpd;
 
@@ -34,10 +38,12 @@ public class MediaPlayerDaemonSAL {
         return _mpd;
     }
 
-    public Admin getAdmin() {
-        return mpd().getAdmin();
+    @Override
+    public StandAloneMonitor getMonitor() {
+        return mpd().getMonitor();
     }
 
+    @Override
     public Player getPlayer() {
         Player player = mpd().getPlayer();
         if (null == player) {
@@ -46,6 +52,7 @@ public class MediaPlayerDaemonSAL {
         return player;
     }
 
+    @Override
     public Playlist getPlaylist() {
         return mpd().getPlaylist();
     }

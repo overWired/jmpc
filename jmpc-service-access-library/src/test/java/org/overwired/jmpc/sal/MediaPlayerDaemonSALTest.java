@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 
 import org.bff.javampd.admin.Admin;
 import org.bff.javampd.database.MusicDatabase;
+import org.bff.javampd.monitor.StandAloneMonitor;
 import org.bff.javampd.server.MPD;
 import org.bff.javampd.player.Player;
 import org.bff.javampd.playlist.Playlist;
@@ -27,36 +28,35 @@ public class MediaPlayerDaemonSALTest {
     @Mock
     private MPD mockMPD;
     private MediaPlayerDaemonSAL sal;
+    @Mock
+    private StandAloneMonitor mockStandAloneMonitor;
 
     @Before
     public void setup() throws Exception {
         when(mockBuilder.build()).thenReturn(mockMPD);
 
-        sal = new MediaPlayerDaemonSAL();
-        sal.setBuilder(mockBuilder);
+        sal = new MediaPlayerDaemonSAL(mockBuilder);
     }
 
     @Test
     public void shouldInvokeBuilderOnlyOnce() throws Exception {
-        Admin mockAdmin = mock(Admin.class);
-        when(mockMPD.getAdmin()).thenReturn(mockAdmin);
+        when(mockMPD.getMonitor()).thenReturn(mockStandAloneMonitor);
         when(mockMPD.isConnected()).thenReturn(true);
 
-        assertEquals("wrong admin object", mockAdmin, sal.getAdmin());
-        sal.getAdmin();
+        assertEquals("wrong monitor object", mockStandAloneMonitor, sal.getMonitor());
+        sal.getMonitor();
         verify(mockBuilder).build();
     }
 
     @Test
     public void shouldInvokeBuilderAgainWhenDisconnected() throws Exception {
-        Admin mockAdmin = mock(Admin.class);
-        when(mockMPD.getAdmin()).thenReturn(mockAdmin);
+        when(mockMPD.getMonitor()).thenReturn(mockStandAloneMonitor);
         when(mockMPD.isConnected()).thenReturn(true).thenReturn(false).thenReturn(true);
 
-        assertEquals("wrong admin object", mockAdmin, sal.getAdmin());
-        sal.getAdmin();
-        sal.getAdmin();
-        sal.getAdmin();
+        assertEquals("wrong monitor object", mockStandAloneMonitor, sal.getMonitor());
+        sal.getMonitor();
+        sal.getMonitor();
+        sal.getMonitor();
         verify(mockBuilder, times(2)).build();
     }
 
@@ -64,7 +64,7 @@ public class MediaPlayerDaemonSALTest {
     public void shouldPropagateMPDConnectionException() throws Exception {
         when(mockBuilder.build()).thenThrow(new MPDConnectionException("intentional test exception - ignore"));
 
-        sal.getAdmin();
+        sal.getMonitor();
     }
 
     @Test
