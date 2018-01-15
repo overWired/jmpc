@@ -1,7 +1,6 @@
 package org.overwired.jmpc.controller;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -12,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.overwired.jmpc.domain.view.ViewPlayerStatus;
 import org.overwired.jmpc.service.MusicPlayerService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.io.FileNotFoundException;
 
@@ -42,7 +43,9 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldUsePlayerSerivceToPlayTrack() throws FileNotFoundException {
-        playerController.play("unknown");
+        final ResponseEntity<Void> response = playerController.play("unknown");
+        assertEquals(HttpStatus.FOUND, response.getStatusCode());
+        assertEquals("/", response.getHeaders().get("location").get(0));
         verify(mockMusicPlayerService).play("unknown");
     }
 
