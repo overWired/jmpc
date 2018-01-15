@@ -5,10 +5,11 @@ import static java.util.Collections.singletonList;
 import static org.bff.javampd.player.Player.Status.STATUS_PAUSED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import org.bff.javampd.player.Player;
 import org.bff.javampd.playlist.Playlist;
+import org.bff.javampd.server.MPDConnectionException;
 import org.bff.javampd.song.MPDSong;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,18 +21,18 @@ import org.overwired.jmpc.domain.app.Track;
 import org.overwired.jmpc.sal.MediaPlayerDaemonSAL;
 import org.springframework.core.convert.ConversionService;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.io.FileNotFoundException;
 
 /**
- * Tests the PlayerStatusESL class.
+ * Tests the PlayerESL class.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class PlayerStatusESLTest {
+public class PlayerESLTest {
 
     private static final String STATUS = "paused";
+    private static final String TRACK_ID = "trackId";
 
-    private PlayerStatusESL esl;
+    private PlayerESL esl;
     private Track currentTrack;
     private Track nextTrack;
 
@@ -58,7 +59,7 @@ public class PlayerStatusESLTest {
         setUpMockConversionService();
         setUpMockPlaylist();
 
-        esl = new PlayerStatusESL(mockConversionService, mockSal);
+        esl = new PlayerESL(mockConversionService, mockSal);
     }
 
     private void setUpMockPlaylist() {
@@ -104,5 +105,27 @@ public class PlayerStatusESLTest {
         assertEquals("wrong status", STATUS, playerStatus.getStatus());
         assertEquals("wrong playlist", singletonList(nextTrack), playerStatus.getPlaylist());
     }
+
+    @Test
+    public void should_play_a_valid_track() throws FileNotFoundException {
+        esl.play(TRACK_ID);
+        verify(mockSal).getPlaylist();
+        verify(mockPlaylist).addSong(TRACK_ID);
+        verify(mockSal).getPlayer();
+        verify(mockPlayer).play();
+    }
+
+    @Test(expected = FileNotFoundException.class)
+    public void should_throw_file_not_found_for_an_invalid_track() throws FileNotFoundException {
+        doThrow(new MPDConnectionException("intentional test exception")).when(mockPlaylist).addSong(TRACK_ID);
+        esl.play(TRACK_ID);
+    }
+
+    @Test
+    public void should_not_filter_direct_playlist_request() throws Exception {
+        when(mockPlaylist.getCurrentSong()).thenReturn(mockCurrentSong);
+        assertEquals("wrong playlist", asList(currentTrack, nextTrack), esl.playlist());
+    }
+
 
 }

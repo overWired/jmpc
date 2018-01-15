@@ -10,8 +10,8 @@ import lombok.Value;
 @Value
 public class ViewCard {
     String artist;
-    String id_a;
-    String id_b;
-    String title_a;
-    String title_b;
+    String index1;
+    String index2;
+    ViewTrack track1;
+    ViewTrack track2;
 }

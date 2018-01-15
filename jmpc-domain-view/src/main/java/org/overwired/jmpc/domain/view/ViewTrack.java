@@ -10,6 +10,6 @@ import lombok.Value;
 @Value
 public class ViewTrack {
     String artist;
-    String path;
+    String id;
     String title;
 }

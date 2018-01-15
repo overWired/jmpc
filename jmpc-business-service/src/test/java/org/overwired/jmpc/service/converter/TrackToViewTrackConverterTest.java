@@ -16,6 +16,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.overwired.jmpc.domain.app.Track;
 import org.overwired.jmpc.domain.view.ViewTrack;
 
+import java.net.URLEncoder;
+import java.util.Base64;
+
 /**
  * Tests the TrackToViewTrackConverter class.
  */
@@ -23,7 +26,7 @@ import org.overwired.jmpc.domain.view.ViewTrack;
 public class TrackToViewTrackConverterTest {
 
     private static final String ARTIST = "artist";
-    private static final String PATH = "path";
+    private static final String PATH = "path/to@file";
     private static final String TITLE = "title";
 
     TrackToViewTrackConverter converter;
@@ -41,7 +44,7 @@ public class TrackToViewTrackConverterTest {
         ViewTrack actual = converter.convert(null);
         assertNotNull("result of conversion was null", actual);
         assertEquals("N / A", actual.getArtist());
-        assertNull(actual.getPath());
+        assertNull(actual.getId());
         assertEquals("N / A", actual.getTitle());
     }
 
@@ -51,7 +54,10 @@ public class TrackToViewTrackConverterTest {
         ViewTrack actual = converter.convert(track);
         assertNotNull("result of conversion was null", actual);
         assertEquals(ARTIST, actual.getArtist());
-        assertEquals(PATH, actual.getPath());
+        String expectedId = URLEncoder.encode(
+                Base64.getUrlEncoder().encodeToString(PATH.getBytes("UTF-8")),"UTF-8");
+
+        assertEquals(expectedId, actual.getId());
         assertEquals(TITLE, actual.getTitle());
     }
 
