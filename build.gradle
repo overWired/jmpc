@@ -6,7 +6,7 @@ buildscript {
             gradle                 : '3.3',
             guava                  : '21.0',
             javaMpd                : '6.0.0', //'5.0.3',
-            springBoot             : '1.5.9.RELEASE',
+            springBoot             : '2.0.0.RELEASE',
             springCloudDependencies: 'Camden.RELEASE'
     ]
 
@@ -37,8 +37,7 @@ buildscript {
 
 }
 
-plugins { id "io.spring.dependency-management" version "1.0.0.RELEASE" }
-
+plugins { id "io.spring.dependency-management" version "1.0.10.RELEASE" }
 
 allprojects {
     defaultTasks 'assemble'
@@ -67,9 +66,15 @@ subprojects {
                 libraries.springContext
         )
 
-        compileOnly(libraries.lombok)
+        annotationProcessor(libraries.lombok)
+
+        implementation(libraries.lombok)
+
+        testAnnotationProcessor(libraries.lombok)
 
         testCompile(libraries.springBootStarterTest)
+
+        testCompileOnly(libraries.lombok)
     }
 
 }
@@ -78,7 +83,7 @@ subprojects {
  * Allows gradle to packaged as part of the build.  This generates infrastructure files to be committed once.
  * Then the build itself will use (or download) the correct version of gradle.
  */
-task wrapper(type: Wrapper) {
-    gradleVersion = versions.gradle
-    distributionUrl = distributionUrl.replaceAll('-bin', '-all')
+tasks.named('wrapper') {
+    distributionType = Wrapper.DistributionType.ALL
 }
+
