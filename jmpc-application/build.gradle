@@ -19,3 +19,7 @@ dependencies {
     compileOnly libraries.springBootDevTools
 }
 
+bootRun {
+    systemProperties System.properties
+}
+
