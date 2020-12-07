@@ -1,4 +1,16 @@
 
+/* use custom properties as variables */
+:root {
+    --card-height: 74;
+    --header-height: 100px;
+    --selections-height: calc(100% - var(--header-height));
+    --music-selections-height: calc( var(--selections-height) / var(--card-height) - 0.5)px;
+}
+
+* {
+    box-sizing: border-box; /* include the border within the height and width */
+}
+
 a:link, a:visited {
     color: Black;
     text-decoration: none;
@@ -9,18 +21,20 @@ a:hover, a:active {
     text-decoration: none;
 }
 
-body {
+html, body {
     height: 100%;
     margin: 0;
+}
+
+body {
     font-family: Tahoma, Geneva, sans-serif;
     font-size: 1.1em;
 }
 
 #header {
     border: 1px solid blue;
-    box-sizing: border-box; /* include the border within the height and width */
 
-    height: 100px;
+    height: var(--header-height);
     width: 100%;
 
     position: fixed;
@@ -55,9 +69,10 @@ body {
 }
 
 #music_selections {
-    column-gap: 0;
-    height: 100%;
-    margin-top: 100px;
+    column-fill: balance;
+    column-gap: 2px;
+    height: auto;     /* if set to 100%, display is truncated and does not scroll ALL the way to the end */
+    margin-top: var(--header-height);
     overflow: scroll;
 }
 
@@ -72,9 +87,11 @@ body {
         rgb(255,204,204)
     );
     border: 1px solid red;
-    height: 72px;
+    display: inline-block;
+    height: calc(var(--card-height)px - 2px); /* subtract top and bottom margin */
     margin: 1px;
     text-align: center;
+    width: 100%;
 }
 
 .card > .track {
@@ -83,25 +100,31 @@ body {
     text-overflow: ellipsis;
 }
 
-@media only screen and (min-device-width : 640px) and (max-device-width : 959px) {
+@media only screen and (pointer: coarse) {
+    .card > .track .selector {
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 640px) and (max-width: 959px) {
     #music_selections {
         column-count: 2;
     }
 }
 
-@media only screen and (min-device-width : 960px) and (max-device-width : 1279px) {
+@media only screen and (min-width: 960px) and (max-width: 1279px) {
     #music_selections {
         column-count: 3;
     }
 }
 
-@media only screen and (min-device-width : 1280px) and (max-device-width : 1599px) {
+@media only screen and (min-width: 1280px) and (max-width: 1599px) {
     #music_selections {
         column-count: 4;
     }
 }
 
-@media only screen and (min-device-width : 1600px) {
+@media only screen and (min-width: 1600px) {
     #music_selections {
         column-count: 5;
     }
