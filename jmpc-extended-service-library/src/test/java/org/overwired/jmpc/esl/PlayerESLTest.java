@@ -5,7 +5,9 @@ import static java.util.Collections.singletonList;
 import static org.bff.javampd.player.Player.Status.STATUS_PAUSED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.bff.javampd.player.Player;
 import org.bff.javampd.playlist.Playlist;
@@ -15,7 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.overwired.jmpc.domain.app.PlayerStatus;
 import org.overwired.jmpc.domain.app.Track;
 import org.overwired.jmpc.sal.MediaPlayerDaemonSAL;
@@ -122,8 +124,7 @@ public class PlayerESLTest {
     }
 
     @Test
-    public void should_not_filter_direct_playlist_request() throws Exception {
-        when(mockPlaylist.getCurrentSong()).thenReturn(mockCurrentSong);
+    public void should_not_filter_direct_playlist_request() {
         assertEquals("wrong playlist", asList(currentTrack, nextTrack), esl.playlist());
     }
 

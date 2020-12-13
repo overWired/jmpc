@@ -1,21 +1,22 @@
 package org.overwired.jmpc.sal;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import org.bff.javampd.admin.Admin;
-import org.bff.javampd.database.MusicDatabase;
 import org.bff.javampd.monitor.StandAloneMonitor;
-import org.bff.javampd.server.MPD;
 import org.bff.javampd.player.Player;
 import org.bff.javampd.playlist.Playlist;
+import org.bff.javampd.server.MPD;
 import org.bff.javampd.server.MPDConnectionException;
 import org.bff.javampd.song.SongSearcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Tests the MediaPlayerDaemonSAL class.
@@ -79,11 +80,11 @@ public class MediaPlayerDaemonSALTest {
     public void testGetPlayer() throws Exception {
         Player mockPlayer = mock(Player.class);
         when(mockMPD.getPlayer()).thenReturn(mockPlayer);
-        
+
         assertEquals(mockPlayer, sal.getPlayer());
     }
-    
-    
+
+
     @Test
     public void testGetPlaylist() throws Exception {
         Playlist mockPlaylist = mock(Playlist.class);

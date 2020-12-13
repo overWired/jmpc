@@ -12,8 +12,7 @@ import java.util.List;
 @Builder
 @Value
 public class ViewPlayerStatus {
-    ViewTrack currentSong;
-    String status;
-    @Singular("playlistItem")
-    List<ViewTrack> playlist;
+    String currentSong;
+    @Singular
+    List<String> upcomingSongs;
 }

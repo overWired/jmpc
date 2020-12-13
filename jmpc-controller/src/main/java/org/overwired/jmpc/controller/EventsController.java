@@ -18,22 +18,22 @@ import java.util.function.Consumer;
 public class EventsController {
 
     private final MusicPlayerService musicPlayerService;
-    private final ObjectMapper objecMapper;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public EventsController(final MusicPlayerService musicPlayerService, final ObjectMapper objecMapper) {
+    public EventsController(final MusicPlayerService musicPlayerService, final ObjectMapper objectMapper) {
         this.musicPlayerService = musicPlayerService;
-        this.objecMapper = objecMapper;
+        this.objectMapper = objectMapper;
     }
 
     @GetMapping(path = "/sse/status", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribeToStatus() {
         log.debug("processing subscription request for status");
         final SseEmitter emitter = new SseEmitter(86400L);
-        log.debug("emitter timeout is {}", emitter.getTimeout());
+        log.trace("emitter timeout is {}", emitter.getTimeout());
         final Consumer<ViewPlayerStatus> eventConsumer = status -> {
             try {
-                emitter.send(objecMapper.writeValueAsString(status));
+                emitter.send(objectMapper.writeValueAsString(status));
             } catch (IOException exception) {
                 log.error("failed to publish status: {}", status, exception);
             }

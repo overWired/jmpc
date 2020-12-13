@@ -1,13 +1,13 @@
 buildscript {
 
     ext.versions = [
-            commonsCollections4    : '4.1',
-            commonsLang3           : '3.5',
-            gradle                 : '3.3',
-            guava                  : '21.0',
-            javaMpd                : '6.0.0', //'5.0.3',
-            springBoot             : '2.0.0.RELEASE',
-            springCloudDependencies: 'Camden.RELEASE'
+            commonsCollections4: '4.1',
+            commonsLang3       : '3.5',
+            gradle             : '3.3',
+            guava              : '21.0',
+            javaMpd            : '6.0.0',
+            springBoot         : '2.1.18.RELEASE',
+            vavr               : '0.10.3'
     ]
 
     ext.libraries = [
@@ -16,16 +16,19 @@ buildscript {
             groovy                : 'org.codehaus.groovy:groovy-all', /* version managed by Spring Boot */
             guava                 : "com.google.guava:guava:${versions.guava}",
             javaMpd               : "net.thejavashop:javampd:${versions.javaMpd}",
+            jacksonDatabind       : "com.fasterxml.jackson.core:jackson-databind",
             lombok                : 'org.projectlombok:lombok',
             springBootDevTools    : 'org.springframework.boot:spring-boot-devtools',
             springBootStarter     : 'org.springframework.boot:spring-boot-starter',
             springBootStarterCache: 'org.springframework.boot:spring-boot-starter-cache',
             springBootStarterTest : 'org.springframework.boot:spring-boot-starter-test',
-            springContext         : 'org.springframework:spring-context'
+            springContext         : 'org.springframework:spring-context',
+            springWeb             : 'org.springframework:spring-web',
+            springWebMvc          : 'org.springframework:spring-webmvc',
+            vavr                  : "io.vavr:vavr:${versions.vavr}"
     ]
 
     ext.requiredRepositories = {
-        mavenLocal()
         mavenCentral()
     }
 
@@ -40,7 +43,7 @@ buildscript {
 plugins { id "io.spring.dependency-management" version "1.0.10.RELEASE" }
 
 allprojects {
-    defaultTasks 'assemble'
+    defaultTasks 'build'
 }
 
 subprojects {

@@ -32,28 +32,43 @@ body {
 }
 
 #header {
-    border: 1px solid blue;
-
+    background: #eeeeee;
     height: var(--header-height);
-    width: 100%;
-
     position: fixed;
+    width: 100%;
     top: 0;
     z-index: 10;
-    background: #eeeeee;
-    -webkit-box-shadow: 0 7px 8px rgba(0, 0, 0, 0.12);
-    -moz-box-shadow: 0 7px 8px rgba(0, 0, 0, 0.12);
     box-shadow: 0 7px 8px rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 7px 8px rgba(0, 0, 0, 0.12);
+    -webkit-box-shadow: 0 7px 8px rgba(0, 0, 0, 0.12);
 }
 
 #player {
+    align: left;
     height: 100%;
     overflow-y: hidden;
     text-align: center;
 }
 
+#player-display {
+    display: inline-block;
+    width: 60%;
+}
+
+#player-control {
+    display: inline-block;
+}
+
 #status {
-    height: 22px;
+    font-size: 110%;
+    height: auto;
+    background: linear-gradient(
+        rgb(255,204,204),
+        rgb(255,153,153),
+        rgb(255,102,102),
+        rgb(255,153,153),
+        rgb(255,204,204)
+    );
 }
 
 #play_queue {

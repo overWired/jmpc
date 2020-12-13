@@ -1,5 +1,6 @@
 package org.overwired.jmpc.esl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bff.javampd.player.Player;
 import org.bff.javampd.playlist.Playlist;
 import org.overwired.jmpc.domain.app.PlayerStatus;
@@ -13,12 +14,14 @@ import org.springframework.stereotype.Repository;
 
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
  * The Extended Service Library for the Music Player.
  */
 @Repository
+@Slf4j
 public class PlayerESL {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PlayerESL.class);
@@ -27,12 +30,12 @@ public class PlayerESL {
     private final MediaPlayerDaemonSAL sal;
 
     @Autowired
-    public PlayerESL(ConversionService conversionService, MediaPlayerDaemonSAL sal) {
+    public PlayerESL(final ConversionService conversionService, final MediaPlayerDaemonSAL sal) {
         this.conversionService = conversionService;
         this.sal = sal;
     }
 
-    public void play(String trackId) throws FileNotFoundException {
+    public void play(final String trackId) throws FileNotFoundException {
         LOGGER.trace("received a request to play {}", trackId);
         try {
             sal.getPlaylist().addSong(trackId);
@@ -43,8 +46,6 @@ public class PlayerESL {
     }
 
     public PlayerStatus playerStatus() {
-        // This is too much.  I am a dumb ass.
-        // The ESL should have less logic, and the business service should do the filtering and combining.
         Player player = sal.getPlayer();
 
         return PlayerStatus.builder()
@@ -81,8 +82,13 @@ public class PlayerESL {
      * @param playlist the playilst to interrogate
      * @return 1 if there is a currentSong, indicating to skip the first song in the songlist; 0 to keep all songs.
      */
-    private int theCurrentSongOf(Playlist playlist) {
+    private int theCurrentSongOf(final Playlist playlist) {
         return (null == playlist.getCurrentSong()) ? 0 : 1;
+    }
+
+    public void subscribe(final Consumer<PlayerStatus> statusPublisher) {
+        log.debug("subscribing to player status events");
+        //sal.subscribe(something -> statusPublisher.accept(PlayerStatus.builder().build()));
     }
 
 }

@@ -38,7 +38,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldUsePlayerServiceToGetPlayer() throws Exception {
-        assertEquals("wrong viewPlayerStatus object returned", viewPlayerStatus, playerController.player());
+        assertEquals("wrong viewPlayerStatus object returned", viewPlayerStatus, playerController.status());
     }
 
     @Test

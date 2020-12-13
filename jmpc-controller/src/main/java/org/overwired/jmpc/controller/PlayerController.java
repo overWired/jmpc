@@ -1,6 +1,7 @@
 package org.overwired.jmpc.controller;
 
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.overwired.jmpc.domain.view.ViewPlayerStatus;
 import org.overwired.jmpc.service.MusicPlayerService;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.io.FileNotFoundException;
 import java.net.URI;
@@ -24,6 +24,7 @@ import java.net.URI;
 @RequestMapping("/player")
 @RestController
 @Setter
+@Slf4j
 public class PlayerController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PlayerController.class);
@@ -32,7 +33,7 @@ public class PlayerController {
     private MusicPlayerService musicPlayerService;
 
     @RequestMapping("/status")
-    public ViewPlayerStatus player() {
+    public ViewPlayerStatus status() {
         return musicPlayerService.status();
     }
 
