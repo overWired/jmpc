@@ -1,39 +1,45 @@
 package org.overwired.jmpc.esl;
 
-import org.bff.javampd.player.Player;
-import org.bff.javampd.playlist.Playlist;
+import lombok.extern.slf4j.Slf4j;
 import org.overwired.jmpc.domain.app.PlayerStatus;
 import org.overwired.jmpc.domain.app.Track;
+import org.overwired.jmpc.domain.app.constant.LogMessage;
+import org.overwired.jmpc.esl.publisher.JukeboxEventPublisher;
 import org.overwired.jmpc.sal.MediaPlayerDaemonSAL;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Repository;
 
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
  * The Extended Service Library for the Music Player.
  */
 @Repository
+@Slf4j
 public class PlayerESL {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PlayerESL.class);
-
     private final ConversionService conversionService;
+    private final JukeboxEventPublisher eventPublisher;
+    private final PlayerStatusESL playerStatusESL;
     private final MediaPlayerDaemonSAL sal;
 
     @Autowired
-    public PlayerESL(ConversionService conversionService, MediaPlayerDaemonSAL sal) {
+    public PlayerESL(final ConversionService conversionService,
+                     final JukeboxEventPublisher eventPublisher,
+                     final PlayerStatusESL playerStatusESL,
+                     final MediaPlayerDaemonSAL sal) {
         this.conversionService = conversionService;
+        this.eventPublisher = eventPublisher;
+        this.playerStatusESL = playerStatusESL;
         this.sal = sal;
     }
 
-    public void play(String trackId) throws FileNotFoundException {
-        LOGGER.trace("received a request to play {}", trackId);
+    public void play(final String trackId) throws FileNotFoundException {
+        log.trace("received a request to play {}", trackId);
         try {
             sal.getPlaylist().addSong(trackId);
         } catch (Exception e) {
@@ -42,16 +48,13 @@ public class PlayerESL {
         sal.getPlayer().play();
     }
 
+    /**
+     * Gets the current status of the player.
+     *
+     * @return the status
+     */
     public PlayerStatus playerStatus() {
-        // This is too much.  I am a dumb ass.
-        // The ESL should have less logic, and the business service should do the filtering and combining.
-        Player player = sal.getPlayer();
-
-        return PlayerStatus.builder()
-                           .currentSong(conversionService.convert(player.getCurrentSong(), Track.class))
-                           .status(conversionService.convert(player.getStatus(), String.class))
-                           .playlist(convertPlaylist(sal.getPlaylist()))
-                           .build();
+        return playerStatusESL.playerStatus();
     }
 
     /**
@@ -67,22 +70,13 @@ public class PlayerESL {
                   .collect(Collectors.toList());
     }
 
-    private List<Track> convertPlaylist(final Playlist playlist) {
-        return playlist.getSongList()
-                       .stream()
-                       .skip(theCurrentSongOf(playlist))
-                       .map(song -> conversionService.convert(song, Track.class))
-                       .collect(Collectors.toList());
-    }
-
-    /**
-     * Determine if the first song in the playlist should be skipped.
-     *
-     * @param playlist the playilst to interrogate
-     * @return 1 if there is a currentSong, indicating to skip the first song in the songlist; 0 to keep all songs.
-     */
-    private int theCurrentSongOf(Playlist playlist) {
-        return (null == playlist.getCurrentSong()) ? 0 : 1;
+    public void subscribe(final Consumer<PlayerStatus> statusPublisher) {
+        log.debug("subscribing to player status events");
+        eventPublisher.subscribe(event ->  {
+            log.debug("handing event {} {}", event.getName(), LogMessage.DETAILS_AT_TRACE);
+            log.trace(LogMessage.DETAIL_PREFIX, event);
+            statusPublisher.accept(event.getPlayerStatus());
+        });
     }
 
 }

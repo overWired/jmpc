@@ -1,7 +1,10 @@
 description = 'the controller layer of the application'
 
 dependencies {
-    compile  project(':jmpc-business-service')
-    compile  project(':jmpc-domain-view')
-    compile('org.springframework:spring-web')
+    compile project(':jmpc-business-service'),
+            project(':jmpc-domain-view'),
+            libraries.jacksonDatabind,
+            libraries.springWeb,
+            libraries.springWebMvc,
+            libraries.vavr
 }

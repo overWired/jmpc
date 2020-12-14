@@ -2,17 +2,14 @@ package org.overwired.jmpc.service.converter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.overwired.jmpc.domain.app.PlayerStatus;
 import org.overwired.jmpc.domain.app.Track;
 import org.overwired.jmpc.domain.view.ViewPlayerStatus;
-import org.overwired.jmpc.domain.view.ViewTrack;
 
 import java.util.Collections;
 
@@ -26,22 +23,15 @@ public class PlayerStatusToViewPlayerStatusConverterTest {
 
     private PlayerStatusToViewPlayerStatusConverter converter;
     private Track currentTrack;
-    private ViewTrack currentViewTrack;
     private Track nextTrack;
-    private ViewTrack nextViewTrack;
     private PlayerStatus playerStatus = null;
-
-    @Mock
-    private TrackToViewTrackConverter mockTrackConverter;
 
     @Before
     public void setup() {
-        converter = new PlayerStatusToViewPlayerStatusConverter(mockTrackConverter);
+        converter = new PlayerStatusToViewPlayerStatusConverter();
 
         currentTrack = Track.builder().title("current").build();
         nextTrack = Track.builder().title("next").build();
-        currentViewTrack = ViewTrack.builder().title("next").build();
-        nextViewTrack = ViewTrack.builder().title("vNext").build();
     }
 
     @Test
@@ -52,14 +42,11 @@ public class PlayerStatusToViewPlayerStatusConverterTest {
     @Test
     public void shouldConvertValidMusicPlayerToEquivalentMusicPlayerView() {
         playerStatus = setUpPlayerStatus();
-        when(mockTrackConverter.convert(currentTrack)).thenReturn(currentViewTrack);
-        when(mockTrackConverter.convert(nextTrack)).thenReturn(nextViewTrack);
 
         ViewPlayerStatus viewPlayerStatus = converter.convert(playerStatus);
         assertNotNull("result should not be null", viewPlayerStatus);
-        assertEquals(currentViewTrack, viewPlayerStatus.getCurrentSong());
-        assertEquals(STATUS, viewPlayerStatus.getStatus());
-        assertEquals(Collections.singletonList(nextViewTrack), viewPlayerStatus.getPlaylist());
+        assertEquals("current", viewPlayerStatus.getCurrentSong());
+        assertEquals(Collections.singletonList("next"), viewPlayerStatus.getUpcomingSongs());
     }
 
     private PlayerStatus setUpPlayerStatus() {

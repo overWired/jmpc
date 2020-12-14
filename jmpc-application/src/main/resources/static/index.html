@@ -1,27 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" data-ng-app="jmpcApp">
+<html data-ng-app="jmpcApp" lang="en">
 <head>
-  <link rel="stylesheet" href="css/jukeboxmpc.css">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
-  <script type="text/javascript" src="js/jukeboxmpc.js"></script>
-  <title>Jukebox Media Player Client</title>
+    <link href="css/jukeboxmpc.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js" type="text/javascript"></script>
+    <script src="js/jukeboxmpc.js" type="text/javascript"></script>
+    <title>Jukebox Media Player Client</title>
 </head>
-<body>
-  <header id="header">
-    <section id="player" data-ng-controller="MusicPlayerController">
-      <!-- want to reuse the playlist-item.html include here, but can't figure out how to set song=player.currentSong -->
-      <section id="status"><em>{{player.currentSong.title}}</em> -- {{player.currentSong.artist}} «{{player.status}}»</section>
-      <div id="play_queue">
-        <ul>
-          <li data-ng-repeat="song in player.playlist" data-ng-include="'playlist-item.html'"></li>
-        </ul>
-      </div>
+<body data-ng-controller="JukeboxController">
+<header id="header">
+    <!--    <section id="player" data-ng-controller="MusicPlayerController">-->
+    <section id="player">
+        <section id="player-display">
+            <section id="status">{{player.currentSong}}</section>
+            <section id="play_queue">
+                <ul>
+                    <li data-ng-repeat="song in player.upcomingSongs">{{ song }}</li>
+                </ul>
+            </section>
+        </section>
+        <section id="player-control">
+<!--            <button data-ng-click="status()" name="refresh">Refresh</button>-->
+        </section>
     </section>
-  </header>
-  <section id="music_selections" data-ng-controller="CardListController">
-    <div class="card" data-ng-repeat="card in cards" data-ng-include="'card.html'"></div>
-  </section>
+</header>
+<!--<section id="music_selections" data-ng-controller="CardListController">-->
+<section id="music_selections">
+    <div class="card" data-ng-include="'card.html'" data-ng-repeat="card in cards"></div>
+</section>
 </body>
 </html>

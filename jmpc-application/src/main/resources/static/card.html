@@ -1,15 +1,13 @@
 <div class="track">
-  <a href="/player/play?trackId={{card.track1.id}}">
-    <span class="selector" data-ng-show="card.track1.title">{{ card.index1 }}: </span>
-    <span class="title">{{ card.track1.title }}</span>
-  </a>
+    <a data-ng-click="play(card.track1.id)">
+        <span class="selector" data-ng-show="card.track1.title">{{ card.index1 }}: </span>
+        <span class="title">{{ card.track1.title }}</span>
+    </a>
 </div>
 <div class="artist">
-  <span class="text" data-ng-bind="card.artist"></span>
+    <span class="text" data-ng-bind="card.artist"></span>
 </div>
-<div class="track">
-  <a href="/player/play?trackId={{card.track2.id}}">
+<div class="track" data-ng-click="play(card.track2.id)">
     <span class="selector" data-ng-show="card.track2.title">{{ card.index2 }}: </span>
     <span class="title">{{ card.track2.title }}</span>
-  </a>
 </div>

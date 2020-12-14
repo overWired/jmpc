@@ -1,39 +1,43 @@
 package org.overwired.jmpc.sal;
 
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.bff.javampd.admin.Admin;
+import lombok.extern.slf4j.Slf4j;
+import org.bff.javampd.command.CommandExecutor;
 import org.bff.javampd.monitor.StandAloneMonitor;
 import org.bff.javampd.player.Player;
 import org.bff.javampd.playlist.Playlist;
-import org.bff.javampd.playlist.PlaylistBasicChangeListener;
 import org.bff.javampd.server.MPD;
 import org.bff.javampd.server.MPDConnectionException;
 import org.bff.javampd.song.SongSearcher;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * A Service Access Library for MusicPlayerDaemon.
  */
 @Component
-@RequiredArgsConstructor
+@Slf4j
 public class MediaPlayerDaemonSAL implements PlayerFactory, PlaylistFactory, StandAloneMonitorFactory {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MediaPlayerDaemonSAL.class);
-
     private final MPD.Builder builder;
-    private int connectCount = 0;
     private MPD _mpd;
+    private int connectCount = 0;
+
+    @Autowired
+    public MediaPlayerDaemonSAL(final MPD.Builder builder) {
+        this.builder = builder;
+    }
 
     private synchronized MPD mpd() throws MPDConnectionException {
         if (null == _mpd || !_mpd.isConnected()) {
-            LOGGER.debug("MPD is null or disconnected - reconnecting.  count={}", ++connectCount);
+            log.debug("MPD is null or disconnected - reconnecting.  count={}", ++connectCount);
             _mpd = builder.build();
+            // Set cross-fade to 2 seconds
+            _mpd.getPlayer().setXFade(2);
+            // Commands not (currently) exposed (or that I could not find) via MPD object
+            final CommandExecutor commandExecutor = _mpd.getCommandExecutor();
+            // Consume mode removes songs from the queue (a.k.a. playlist) once they've been played - like a jukebox.
+            log.debug("enabling MPD consume mode");
+            commandExecutor.sendCommand("consume", "1");
         }
         return _mpd;
     }
@@ -61,4 +65,8 @@ public class MediaPlayerDaemonSAL implements PlayerFactory, PlaylistFactory, Sta
         return mpd().getSongSearcher();
     }
 
+    public void subscribe(Object o) {
+        mpd().getMonitor()
+             .addPlaylistChangeListener(event -> log.debug("received playlistChangedEvent {}", event));
+    }
 }
