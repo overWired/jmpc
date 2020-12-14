@@ -29,7 +29,7 @@ public class EventsController {
     @GetMapping(path = "/sse/status", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribeToStatus() {
         log.debug("processing subscription request for status");
-        final SseEmitter emitter = new SseEmitter(86400L);
+        final SseEmitter emitter = new SseEmitter(24 * 60 * 60 * 1000L);
         log.trace("emitter timeout is {}", emitter.getTimeout());
         final Consumer<ViewPlayerStatus> eventConsumer = status -> {
             try {

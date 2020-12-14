@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.overwired.jmpc.domain.app.PlayerStatus;
 import org.overwired.jmpc.domain.app.Track;
+import org.overwired.jmpc.domain.app.constant.LogMessage;
 import org.overwired.jmpc.domain.view.ViewPlayerStatus;
 import org.overwired.jmpc.esl.PlayerESL;
 import org.slf4j.Logger;
@@ -47,6 +48,17 @@ public class MusicPlayerService {
         }
     }
 
+    public void subscribe(Consumer<ViewPlayerStatus> eventConsumer) {
+        Consumer<PlayerStatus> statusPublisher = status -> {
+            log.debug("publishing player status: currentSong={} {}",
+                      status.getCurrentSong(),
+                      LogMessage.DETAILS_AT_TRACE);
+            log.trace(LogMessage.DETAIL_PREFIX, status);
+            eventConsumer.accept(conversionService.convert(status, ViewPlayerStatus.class));
+        };
+        playerESL.subscribe(statusPublisher);
+    }
+
     private boolean trackIsNotAlreadyLastInQueue(String trackId) {
         boolean trackIsLast = false;
         final List<Track> tracks = playerESL.playlist();
@@ -55,14 +67,6 @@ public class MusicPlayerService {
             trackIsLast = lastTrack.getPath().equals(trackId);
         }
         return !trackIsLast;
-    }
-
-    public void subscribe(Consumer<ViewPlayerStatus> eventConsumer) {
-        Consumer<PlayerStatus> statusPublisher = status -> {
-            log.trace("publishing player status: {}", status);
-            eventConsumer.accept(conversionService.convert(status, ViewPlayerStatus.class));
-        };
-        playerESL.subscribe(statusPublisher);
     }
 
 }

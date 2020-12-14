@@ -6,6 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.bff.javampd.command.CommandExecutor;
 import org.bff.javampd.monitor.StandAloneMonitor;
 import org.bff.javampd.player.Player;
 import org.bff.javampd.playlist.Playlist;
@@ -27,7 +28,11 @@ public class MediaPlayerDaemonSALTest {
     @Mock
     private MPD.Builder mockBuilder;
     @Mock
+    CommandExecutor mockCommandExecutor;
+    @Mock
     private MPD mockMPD;
+    @Mock
+    private Player mockPlayer;
     private MediaPlayerDaemonSAL sal;
     @Mock
     private StandAloneMonitor mockStandAloneMonitor;
@@ -35,6 +40,8 @@ public class MediaPlayerDaemonSALTest {
     @Before
     public void setup() throws Exception {
         when(mockBuilder.build()).thenReturn(mockMPD);
+        when(mockMPD.getPlayer()).thenReturn(mockPlayer);
+        when(mockMPD.getCommandExecutor()).thenReturn(mockCommandExecutor);
 
         sal = new MediaPlayerDaemonSAL(mockBuilder);
     }
@@ -83,7 +90,6 @@ public class MediaPlayerDaemonSALTest {
 
         assertEquals(mockPlayer, sal.getPlayer());
     }
-
 
     @Test
     public void testGetPlaylist() throws Exception {

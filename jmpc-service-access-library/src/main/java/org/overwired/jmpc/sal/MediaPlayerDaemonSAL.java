@@ -1,6 +1,7 @@
 package org.overwired.jmpc.sal;
 
 import lombok.extern.slf4j.Slf4j;
+import org.bff.javampd.command.CommandExecutor;
 import org.bff.javampd.monitor.StandAloneMonitor;
 import org.bff.javampd.player.Player;
 import org.bff.javampd.playlist.Playlist;
@@ -30,6 +31,13 @@ public class MediaPlayerDaemonSAL implements PlayerFactory, PlaylistFactory, Sta
         if (null == _mpd || !_mpd.isConnected()) {
             log.debug("MPD is null or disconnected - reconnecting.  count={}", ++connectCount);
             _mpd = builder.build();
+            // Set cross-fade to 2 seconds
+            _mpd.getPlayer().setXFade(2);
+            // Commands not (currently) exposed (or that I could not find) via MPD object
+            final CommandExecutor commandExecutor = _mpd.getCommandExecutor();
+            // Consume mode removes songs from the queue (a.k.a. playlist) once they've been played - like a jukebox.
+            log.debug("enabling MPD consume mode");
+            commandExecutor.sendCommand("consume", "1");
         }
         return _mpd;
     }
